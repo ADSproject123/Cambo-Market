@@ -10,7 +10,7 @@ export default async function AdminProductsPage() {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Products</h1>
+        <h1 className="text-2xl font-bold">Products</h1>
         <SyncButton category="google-accounts" />
       </div>
 

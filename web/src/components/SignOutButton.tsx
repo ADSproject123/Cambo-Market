@@ -14,7 +14,7 @@ export default function SignOutButton() {
         router.push('/');
         router.refresh();
       }}
-      className="text-neutral-500 hover:text-neutral-900"
+      className="text-neutral-500 hover:text-brand"
     >
       Sign out
     </button>

@@ -12,7 +12,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="max-w-lg">
-      <h1 className="text-xl font-semibold">{product.title}</h1>
+      <h1 className="text-2xl font-bold">{product.title}</h1>
       <p className="mt-2 text-2xl font-bold">{formatMoney(sellPrice(product.base_price), product.currency)}</p>
       <dl className="mt-4 space-y-1 text-sm text-neutral-600">
         <div>

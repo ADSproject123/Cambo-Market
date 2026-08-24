@@ -30,10 +30,10 @@ export default function SignupPage() {
   if (done) {
     return (
       <div className="mx-auto max-w-sm">
-        <h1 className="mb-2 text-xl font-semibold">Check your email</h1>
+        <h1 className="mb-2 text-2xl font-bold">Check your email</h1>
         <p className="text-sm text-neutral-600">
           We sent a confirmation link to <strong>{email}</strong>. Confirm it, then{' '}
-          <Link href="/login" className="underline">log in</Link>.
+          <Link href="/login" className="font-medium text-brand hover:underline">log in</Link>.
         </p>
       </div>
     );
@@ -41,7 +41,7 @@ export default function SignupPage() {
 
   return (
     <div className="mx-auto max-w-sm">
-      <h1 className="mb-6 text-xl font-semibold">Sign up</h1>
+      <h1 className="mb-6 text-2xl font-bold">Sign up</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="email"
@@ -49,7 +49,7 @@ export default function SignupPage() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded border border-neutral-300 px-3 py-2"
+          className="rounded-lg border border-neutral-300 px-3 py-2 focus:border-brand"
         />
         <input
           type="password"
@@ -58,19 +58,19 @@ export default function SignupPage() {
           placeholder="Password (min. 6 characters)"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded border border-neutral-300 px-3 py-2"
+          className="rounded-lg border border-neutral-300 px-3 py-2 focus:border-brand"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
           disabled={loading}
-          className="rounded bg-neutral-900 px-3 py-2 text-white disabled:opacity-50"
+          className="rounded-full bg-black px-4 py-2.5 font-medium text-white transition-colors hover:bg-brand disabled:opacity-50"
         >
           {loading ? 'Signing up…' : 'Sign up'}
         </button>
       </form>
       <p className="mt-4 text-sm text-neutral-500">
-        Already have an account? <Link href="/login" className="underline">Log in</Link>
+        Already have an account? <Link href="/login" className="font-medium text-brand hover:underline">Log in</Link>
       </p>
     </div>
   );

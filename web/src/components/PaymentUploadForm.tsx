@@ -43,7 +43,7 @@ export default function PaymentUploadForm({ orderId }: { orderId: string }) {
       <button
         type="submit"
         disabled={loading || !file}
-        className="w-fit rounded bg-neutral-900 px-4 py-2 text-white disabled:opacity-50"
+        className="w-fit rounded-full bg-brand px-4 py-2 font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-50"
       >
         {loading ? 'Uploading…' : 'Upload payment proof'}
       </button>

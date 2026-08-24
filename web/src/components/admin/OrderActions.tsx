@@ -27,14 +27,14 @@ export function ApproveRejectButtons({ orderId }: { orderId: string }) {
       <button
         onClick={() => act('approve')}
         disabled={loading !== null}
-        className="rounded bg-green-600 px-3 py-1.5 text-sm text-white disabled:opacity-50"
+        className="rounded-full bg-green-600 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-50"
       >
         {loading === 'approve' ? 'Approving…' : '✅ Approve'}
       </button>
       <button
         onClick={() => act('reject')}
         disabled={loading !== null}
-        className="rounded bg-red-600 px-3 py-1.5 text-sm text-white disabled:opacity-50"
+        className="rounded-full bg-red-600 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
       >
         {loading === 'reject' ? 'Rejecting…' : '❌ Reject'}
       </button>
@@ -70,14 +70,14 @@ export function DeliverForm({ orderId }: { orderId: string }) {
         placeholder="Key / account details to deliver to the buyer"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="rounded border border-neutral-300 px-2 py-1 text-sm"
+        className="rounded-lg border border-neutral-300 px-2 py-1 text-sm focus:border-brand"
         rows={2}
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button
         type="submit"
         disabled={loading}
-        className="w-fit rounded bg-neutral-900 px-3 py-1.5 text-sm text-white disabled:opacity-50"
+        className="w-fit rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-50"
       >
         {loading ? 'Delivering…' : '🎁 Mark fulfilled & deliver'}
       </button>

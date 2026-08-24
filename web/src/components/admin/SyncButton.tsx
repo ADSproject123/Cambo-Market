@@ -33,7 +33,7 @@ export default function SyncButton({ category }: { category: string }) {
       <button
         onClick={handleSync}
         disabled={loading}
-        className="rounded border border-neutral-300 px-3 py-1.5 text-sm disabled:opacity-50"
+        className="rounded-full border border-black px-4 py-1.5 text-sm font-medium transition-colors hover:border-brand hover:text-brand disabled:opacity-50"
       >
         {loading ? 'Syncing…' : `🔄 Sync ${category}`}
       </button>

@@ -41,7 +41,10 @@ export default function AddProductForm() {
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="rounded border border-neutral-300 px-3 py-1.5 text-sm">
+      <button
+        onClick={() => setOpen(true)}
+        className="rounded-full border border-black px-4 py-1.5 text-sm font-medium transition-colors hover:border-brand hover:text-brand"
+      >
         + Add product
       </button>
     );
@@ -54,14 +57,14 @@ export default function AddProductForm() {
         placeholder="Category slug (e.g. google-accounts)"
         value={form.category}
         onChange={(e) => setForm({ ...form, category: e.target.value })}
-        className="rounded border border-neutral-300 px-2 py-1 text-sm"
+        className="rounded-lg border border-neutral-300 px-2 py-1 text-sm focus:border-brand"
       />
       <input
         required
         placeholder="Title"
         value={form.title}
         onChange={(e) => setForm({ ...form, title: e.target.value })}
-        className="rounded border border-neutral-300 px-2 py-1 text-sm"
+        className="rounded-lg border border-neutral-300 px-2 py-1 text-sm focus:border-brand"
       />
       <input
         required
@@ -70,31 +73,31 @@ export default function AddProductForm() {
         placeholder="Base price (USD)"
         value={form.basePrice}
         onChange={(e) => setForm({ ...form, basePrice: e.target.value })}
-        className="rounded border border-neutral-300 px-2 py-1 text-sm"
+        className="rounded-lg border border-neutral-300 px-2 py-1 text-sm focus:border-brand"
       />
       <input
         required
         placeholder="Product URL"
         value={form.url}
         onChange={(e) => setForm({ ...form, url: e.target.value })}
-        className="rounded border border-neutral-300 px-2 py-1 text-sm"
+        className="rounded-lg border border-neutral-300 px-2 py-1 text-sm focus:border-brand"
       />
       <input
         placeholder="Image URL (optional)"
         value={form.imageUrl}
         onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-        className="rounded border border-neutral-300 px-2 py-1 text-sm"
+        className="rounded-lg border border-neutral-300 px-2 py-1 text-sm focus:border-brand"
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="flex gap-2">
         <button
           type="submit"
           disabled={loading}
-          className="rounded bg-neutral-900 px-3 py-1.5 text-sm text-white disabled:opacity-50"
+          className="rounded-full bg-black px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-brand disabled:opacity-50"
         >
           {loading ? 'Adding…' : 'Add'}
         </button>
-        <button type="button" onClick={() => setOpen(false)} className="rounded border border-neutral-300 px-3 py-1.5 text-sm">
+        <button type="button" onClick={() => setOpen(false)} className="rounded-full border border-neutral-300 px-4 py-1.5 text-sm">
           Cancel
         </button>
       </div>

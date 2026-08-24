@@ -21,10 +21,10 @@ export default async function OrdersPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">My orders</h1>
+      <h1 className="mb-6 text-2xl font-bold">My orders</h1>
       {orders.length === 0 ? (
         <p className="text-neutral-500">
-          No orders yet — <Link href="/" className="underline">browse listings</Link>.
+          No orders yet — <Link href="/" className="font-medium text-brand hover:underline">browse listings</Link>.
         </p>
       ) : (
         <div className="flex flex-col gap-3">
@@ -32,7 +32,7 @@ export default async function OrdersPage() {
             <Link
               key={o.id}
               href={`/checkout/${o.id}`}
-              className="rounded-lg border border-neutral-200 bg-white p-4 hover:border-neutral-400"
+              className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-brand"
             >
               <div className="flex items-center justify-between">
                 <p className="font-medium">{o.product_title}</p>

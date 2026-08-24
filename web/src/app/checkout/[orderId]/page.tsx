@@ -17,7 +17,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ order
 
   return (
     <div className="max-w-md">
-      <h1 className="text-xl font-semibold">Order {order.id.slice(0, 8).toUpperCase()}</h1>
+      <h1 className="text-2xl font-bold">Order {order.id.slice(0, 8).toUpperCase()}</h1>
       <p className="mt-1 text-neutral-600">{order.product_title}</p>
       <p className="mt-2 text-2xl font-bold">{formatMoney(order.total_amount ?? 0, order.currency)}</p>
 
@@ -40,7 +40,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ order
       {order.status === 'approved' && (
         <p className="mt-6 rounded bg-blue-50 p-3 text-sm text-blue-800">
           Payment confirmed! We&apos;re purchasing your item now — you&apos;ll see the delivery on your{' '}
-          <a href="/orders" className="underline">orders page</a> shortly.
+          <a href="/orders" className="font-medium text-brand hover:underline">orders page</a> shortly.
         </p>
       )}
       {order.status === 'rejected' && (

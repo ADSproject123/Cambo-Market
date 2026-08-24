@@ -37,7 +37,7 @@ export default function BuyButton({ offerId, isSignedIn }: { offerId: string; is
       <button
         onClick={handleBuy}
         disabled={loading}
-        className="rounded bg-neutral-900 px-4 py-2 text-white disabled:opacity-50"
+        className="rounded-full bg-brand px-5 py-2.5 font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-50"
       >
         {loading ? 'Starting order…' : isSignedIn ? '✅ Buy' : 'Log in to buy'}
       </button>

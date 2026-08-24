@@ -20,31 +20,38 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-neutral-50 text-neutral-900">
+      <body className="min-h-full flex flex-col bg-white text-black">
         <header className="border-b border-neutral-200 bg-white">
           <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
+            <Link href="/" className="flex items-center gap-2 text-lg font-bold">
               <Image src="/logo.jpeg" alt="Cheap Stuff" width={36} height={36} className="rounded" priority />
               Cheap Stuff
             </Link>
-            <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-5 text-sm font-medium">
               {user ? (
                 <>
-                  <Link href="/orders">My orders</Link>
-                  {user.role === 'admin' && <Link href="/admin">Admin</Link>}
+                  <Link href="/orders" className="hover:text-brand">My orders</Link>
+                  {user.role === 'admin' && (
+                    <Link href="/admin" className="hover:text-brand">Admin</Link>
+                  )}
                   <span className="text-neutral-500">{user.email}</span>
                   <SignOutButton />
                 </>
               ) : (
                 <>
-                  <Link href="/login">Log in</Link>
-                  <Link href="/signup">Sign up</Link>
+                  <Link href="/login" className="hover:text-brand">Log in</Link>
+                  <Link
+                    href="/signup"
+                    className="rounded-full bg-black px-4 py-2 text-white hover:bg-brand"
+                  >
+                    Sign up
+                  </Link>
                 </>
               )}
             </div>
           </nav>
         </header>
-        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6">{children}</main>
+        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">{children}</main>
       </body>
     </html>
   );
