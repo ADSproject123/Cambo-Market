@@ -28,6 +28,37 @@ export async function listProducts(category?: string): Promise<ProductRow[]> {
   return (data as ProductRow[]) ?? [];
 }
 
+export interface CategorySummary {
+  category: string;
+  count: number;
+  cheapestPrice: number;
+  currency: string;
+  imageUrl: string | null;
+}
+
+/** Distinct categories currently stocked, cheapest-price-first within each, for the storefront landing page. */
+export async function listCategories(): Promise<CategorySummary[]> {
+  const products = await listProducts();
+  const byCategory = new Map<string, ProductRow[]>();
+
+  for (const p of products) {
+    const list = byCategory.get(p.category) ?? [];
+    list.push(p);
+    byCategory.set(p.category, list);
+  }
+
+  return Array.from(byCategory.entries()).map(([category, items]) => {
+    const cheapest = items.reduce((a, b) => (b.base_price < a.base_price ? b : a));
+    return {
+      category,
+      count: items.length,
+      cheapestPrice: cheapest.base_price,
+      currency: cheapest.currency,
+      imageUrl: items.find((p) => p.image_url)?.image_url ?? null,
+    };
+  });
+}
+
 export async function getProduct(offerId: string): Promise<ProductRow | null> {
   const db = createAdminClient();
   const { data, error } = await db.from('products').select().eq('offer_id', offerId).maybeSingle();

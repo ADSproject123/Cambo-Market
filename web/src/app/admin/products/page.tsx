@@ -1,6 +1,6 @@
 import { listProducts } from '@/lib/db/products';
 import { sellPrice, formatMoney } from '@/lib/pricing';
-import SyncButton from '@/components/admin/SyncButton';
+import SyncCategoryForm from '@/components/admin/SyncCategoryForm';
 import AddProductForm from '@/components/admin/AddProductForm';
 import DeleteProductButton from '@/components/admin/DeleteProductButton';
 
@@ -9,12 +9,10 @@ export default async function AdminProductsPage() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Products</h1>
-        <SyncButton category="google-accounts" />
-      </div>
+      <h1 className="mb-4 text-2xl font-bold">Products</h1>
 
-      <div className="mb-6">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <SyncCategoryForm />
         <AddProductForm />
       </div>
 
