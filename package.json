@@ -5,7 +5,9 @@
   "type": "module",
   "description": "Telegram middleman bot for buying G2A/G2G listings via manual admin fulfillment",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "concurrently -n bot,web -c blue,green \"npm:dev:bot\" \"npm:dev:web\"",
+    "dev:bot": "tsx watch src/index.ts",
+    "dev:web": "npm run dev --prefix web",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit"
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
+    "concurrently": "^10.0.5",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }

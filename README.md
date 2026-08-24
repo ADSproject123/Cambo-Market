@@ -6,6 +6,11 @@ Telegram (no pasting links), buyers tap Buy and pay via your QR code, upload
 proof of payment, an admin confirms it, manually buys the item on G2G, and
 delivers it back through the bot.
 
+There's also a companion web app at [`web/`](web/) — a client/admin storefront
+that shares this same Supabase project (same `products`/`orders` tables), so
+an order placed on the web shows up for admins next to Telegram orders. See
+[`web/README.md`](web/README.md) for its setup.
+
 ## How it works
 
 1. Buyer sends `/start` → bot shows the **Google Accounts** catalog (scraped
