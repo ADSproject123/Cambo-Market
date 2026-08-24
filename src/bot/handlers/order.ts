@@ -2,12 +2,36 @@ import fs from 'node:fs';
 import type { Context, Telegraf } from 'telegraf';
 import { config } from '../../config.js';
 import { findLatestOrderByUserAndStatus, getOrder, updateOrder } from '../../db/orders.js';
+import type { OrderRow } from '../../db/types.js';
 import { formatMoney } from '../../pricing.js';
 import { notifyAdminsWithPhoto } from '../notifyAdmins.js';
 import { approveRejectKeyboard, cancelOnlyKeyboard } from '../keyboards.js';
 
 function shortRef(orderId: string): string {
   return orderId.slice(0, 8).toUpperCase();
+}
+
+/** Marks an order awaiting_payment and sends the buyer the QR + amount to pay. Shared by the link-lookup and catalog buy flows. */
+export async function presentPaymentQr(ctx: Context, order: OrderRow): Promise<void> {
+  await updateOrder(order.id, { status: 'awaiting_payment' });
+
+  const caption = [
+    `💳 Order <b>${shortRef(order.id)}</b>`,
+    `Amount to pay: <b>${formatMoney(order.total_amount!, order.currency)}</b>`,
+    '',
+    config.paymentInstructions,
+    '',
+    'After paying, send me a screenshot of the payment as proof.',
+  ].join('\n');
+
+  if (fs.existsSync(config.paymentQrImagePath)) {
+    await ctx.replyWithPhoto(
+      { source: fs.createReadStream(config.paymentQrImagePath) },
+      { caption, parse_mode: 'HTML', ...cancelOnlyKeyboard(order.id) },
+    );
+  } else {
+    await ctx.reply(caption, { parse_mode: 'HTML', ...cancelOnlyKeyboard(order.id) });
+  }
 }
 
 export async function handleBuyCallback(ctx: Context): Promise<void> {
@@ -25,26 +49,8 @@ export async function handleBuyCallback(ctx: Context): Promise<void> {
     return;
   }
 
-  await updateOrder(order.id, { status: 'awaiting_payment' });
   await ctx.answerCbQuery();
-
-  const caption = [
-    `💳 Order <b>${shortRef(order.id)}</b>`,
-    `Amount to pay: <b>${formatMoney(order.total_amount, order.currency)}</b>`,
-    '',
-    config.paymentInstructions,
-    '',
-    'After paying, send me a screenshot of the payment as proof.',
-  ].join('\n');
-
-  if (fs.existsSync(config.paymentQrImagePath)) {
-    await ctx.replyWithPhoto(
-      { source: fs.createReadStream(config.paymentQrImagePath) },
-      { caption, parse_mode: 'HTML', ...cancelOnlyKeyboard(order.id) },
-    );
-  } else {
-    await ctx.reply(caption, { parse_mode: 'HTML', ...cancelOnlyKeyboard(order.id) });
-  }
+  await presentPaymentQr(ctx, order);
 }
 
 export async function handleCancelCallback(ctx: Context): Promise<void> {
@@ -73,7 +79,7 @@ export async function handlePaymentScreenshot(ctx: Context, bot: Telegraf): Prom
 
   const order = await findLatestOrderByUserAndStatus(ctx.from.id, ['awaiting_payment']);
   if (!order) {
-    await ctx.reply("I don't have a pending order waiting for payment. Paste a product link to start one.");
+    await ctx.reply("I don't have a pending order waiting for payment. Send /start to browse products.");
     return;
   }
 

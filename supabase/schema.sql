@@ -41,6 +41,27 @@ create table if not exists orders (
 create index if not exists orders_telegram_user_id_idx on orders(telegram_user_id);
 create index if not exists orders_status_idx on orders(status);
 
+-- Cached catalog of scraped G2G listings, refreshed by /sync.
+create table if not exists products (
+  offer_id text primary key,
+  category text not null,
+  title text not null,
+  base_price numeric not null,
+  currency text not null default 'USD',
+  seller_username text,
+  seller_verified boolean not null default false,
+  rating numeric,
+  satisfaction_rate numeric,
+  total_success_orders integer not null default 0,
+  available_qty integer not null default 0,
+  url text not null,
+  image_url text,
+  last_synced_at timestamptz not null default now(),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists products_category_idx on products(category);
+
 create or replace function set_updated_at()
 returns trigger as $$
 begin
