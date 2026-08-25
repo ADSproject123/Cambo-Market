@@ -4,6 +4,8 @@
 // generic formatter below.
 const WORD_OVERRIDES: Record<string, string> = {
   cnva: 'Canva',
+  ppq: 'PPQ',
+  ai: 'AI',
 };
 
 /** "google-accounts" -> "Google Accounts", "cnva-accounts" -> "Canva Accounts" */

@@ -3,6 +3,8 @@
 // title-case would render as a typo.
 const WORD_OVERRIDES: Record<string, string> = {
   cnva: 'Canva',
+  ppq: 'PPQ',
+  ai: 'AI',
 };
 
 /** "google-accounts" -> "Google Accounts", "cnva-accounts" -> "Canva Accounts" */
