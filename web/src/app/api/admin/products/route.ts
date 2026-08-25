@@ -19,6 +19,8 @@ export async function POST(request: Request) {
       currency: body.currency || 'USD',
       url: body.url,
       imageUrl: body.imageUrl ?? null,
+      variantGroup: body.variantGroup ?? null,
+      variantLabel: body.variantLabel ?? null,
     });
 
     return NextResponse.json({ product });

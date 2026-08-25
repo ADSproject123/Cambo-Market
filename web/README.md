@@ -19,11 +19,13 @@ from this web dashboard, it also sends the buyer a Telegram message (via
 ## Setup
 
 1. Run [`../supabase/schema.sql`](../supabase/schema.sql) if you haven't
-   already (from setting up the bot), then run
+   already (from setting up the bot), then
    [`../supabase/schema_web.sql`](../supabase/schema_web.sql) — it adds the
    `profiles` table (auth roles), lets `orders` originate from a web user
    instead of only Telegram, and creates the private `payment-proofs`
-   storage bucket.
+   storage bucket — then
+   [`../supabase/schema_variants.sql`](../supabase/schema_variants.sql),
+   which adds the two nullable columns behind price tiers (see below).
 2. Copy `.env.local.example` to `.env.local` and fill in your Supabase
    project's URL + anon key + service role key (same project as the bot).
    `BOT_TOKEN` is optional (only needed for the cross-channel Telegram
@@ -44,6 +46,23 @@ npm install
 npm run dev
 ```
 
+## Price tiers (variants)
+
+A single "product" on the storefront can have several price tiers — e.g. a
+Notion listing offered at 1 Month / 3 Months / 12 Months — shown as one card
+with a plan selector instead of unrelated separate cards. This is opt-in and
+additive: give two or more `products` rows the same `variant_group` value
+(any string you pick) plus a `variant_label` per row (e.g. "1 Month"), via
+Edit on `/admin/products` or the "Price tiers" fields on Add product. Rows
+with no `variant_group` behave exactly as before — their own standalone card.
+
+This works for both scraped and manually-added rows, and re-running Sync on
+a category never touches `variant_group`/`variant_label` (the sync upsert
+doesn't include those columns, so Postgres leaves them alone on conflict) —
+tag a scraped listing once and it stays tagged across future syncs. Buying a
+tier is just buying that specific product row; `orders` didn't need to
+change at all for this.
+
 ## Project layout
 
 ```
@@ -56,20 +75,23 @@ src/
       admin.ts                 service-role client, server-only (all real data access)
     auth.ts                   getSessionUser / requireRole
     db/
-      products.ts               product queries + manual CRUD + scraped upsert
+      products.ts               product queries + manual CRUD + scraped upsert + variant grouping
       orders.ts                  order queries, shared shape with the bot's orders table
     scrapers/g2gCatalog.ts     same G2G category scraper as the bot (kept in sync manually)
     telegram/notify.ts        cross-channel notify + screenshot proxy for Telegram-originated orders
     storage.ts                Supabase Storage upload/signed-URL for web-uploaded screenshots
     pricing.ts                base price + CATALOG_MARKUP_USD
+    productGrouping.ts        collapses variant_group rows into one card for category listing pages
+    format.ts                 category slug -> display name (with brand-name overrides)
   app/
-    page.tsx                  storefront (product grid)
-    products/[offerId]/        product detail + Buy
+    page.tsx                  storefront (category cards)
+    categories/[slug]/         product grid for one category (grouped by variant)
+    products/[offerId]/        product detail + tier picker + Buy
     checkout/[orderId]/         QR + screenshot upload + status
     orders/                    client's own order history
     login/, signup/            Supabase Auth forms
     admin/                     role-gated (layout.tsx redirects non-admins)
-      products/                 CRUD table + Sync now button
+      products/                 table + Sync-any-category form + Add/Edit product (incl. tier tagging)
       orders/                    unified order queue, approve/reject/deliver
     api/                       route handlers backing all of the above
 ```

@@ -15,6 +15,10 @@ export interface ProductRow {
   available_qty: number;
   url: string;
   image_url: string | null;
+  /** Rows sharing the same variant_group are price tiers of the same underlying item (see schema_variants.sql). Null = standalone product. */
+  variant_group: string | null;
+  /** Tier label shown to the buyer, e.g. "1 Month" — only meaningful when variant_group is set. */
+  variant_label: string | null;
   last_synced_at: string;
   created_at: string;
 }
@@ -66,6 +70,26 @@ export async function getProduct(offerId: string): Promise<ProductRow | null> {
   return data as ProductRow | null;
 }
 
+/**
+ * All price tiers for the product at `offerId`: if it has a variant_group,
+ * every row sharing that group (cheapest first); otherwise just itself.
+ * This is what the product detail page renders as the tier selector.
+ */
+export async function getProductVariants(offerId: string): Promise<ProductRow[]> {
+  const product = await getProduct(offerId);
+  if (!product) return [];
+  if (!product.variant_group) return [product];
+
+  const db = createAdminClient();
+  const { data, error } = await db
+    .from('products')
+    .select()
+    .eq('variant_group', product.variant_group)
+    .order('base_price', { ascending: true });
+  if (error) throw error;
+  return (data as ProductRow[]) ?? [product];
+}
+
 export async function upsertScrapedProducts(category: string, offers: G2GCatalogOffer[]): Promise<void> {
   if (offers.length === 0) return;
   const db = createAdminClient();
@@ -99,30 +123,31 @@ export interface ManualProductInput {
   currency: string;
   url: string;
   imageUrl?: string | null;
+  variantGroup?: string | null;
+  variantLabel?: string | null;
 }
 
-/** Admin-created/edited listing — not tied to a scraped G2G offer_id unless one is supplied. */
+/** Admin-created/edited listing — not tied to a scraped G2G offer_id unless one is supplied. Also used to tag an existing (incl. scraped) row into a variant_group. */
 export async function upsertManualProduct(input: ManualProductInput): Promise<ProductRow> {
   const db = createAdminClient();
   const offerId = input.offerId ?? `manual-${crypto.randomUUID()}`;
 
-  const { data, error } = await db
-    .from('products')
-    .upsert(
-      {
-        offer_id: offerId,
-        category: input.category,
-        title: input.title,
-        base_price: input.basePrice,
-        currency: input.currency,
-        url: input.url,
-        image_url: input.imageUrl ?? null,
-        last_synced_at: new Date().toISOString(),
-      },
-      { onConflict: 'offer_id' },
-    )
-    .select()
-    .single();
+  const row: Record<string, unknown> = {
+    offer_id: offerId,
+    category: input.category,
+    title: input.title,
+    base_price: input.basePrice,
+    currency: input.currency,
+    url: input.url,
+    image_url: input.imageUrl ?? null,
+    last_synced_at: new Date().toISOString(),
+  };
+  // Only reference these columns when actually used, so this keeps working
+  // on a database that hasn't run schema_variants.sql yet.
+  if (input.variantGroup) row.variant_group = input.variantGroup;
+  if (input.variantLabel) row.variant_label = input.variantLabel;
+
+  const { data, error } = await db.from('products').upsert(row, { onConflict: 'offer_id' }).select().single();
 
   if (error) throw error;
   return data as ProductRow;

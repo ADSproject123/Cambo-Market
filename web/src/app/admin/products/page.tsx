@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { listProducts } from '@/lib/db/products';
 import { sellPrice, formatMoney } from '@/lib/pricing';
 import SyncCategoryForm from '@/components/admin/SyncCategoryForm';
@@ -22,6 +23,7 @@ export default async function AdminProductsPage() {
             <tr>
               <th className="p-3">Title</th>
               <th className="p-3">Category</th>
+              <th className="p-3">Variant group / tier</th>
               <th className="p-3">G2G price</th>
               <th className="p-3">Sell price</th>
               <th className="p-3">Seller</th>
@@ -33,11 +35,19 @@ export default async function AdminProductsPage() {
               <tr key={p.offer_id} className="border-b border-neutral-100 last:border-0">
                 <td className="p-3">{p.title}</td>
                 <td className="p-3 text-neutral-500">{p.category}</td>
+                <td className="p-3 text-neutral-500">
+                  {p.variant_group ? `${p.variant_group} · ${p.variant_label ?? '—'}` : '—'}
+                </td>
                 <td className="p-3">{formatMoney(p.base_price, p.currency)}</td>
                 <td className="p-3 font-medium">{formatMoney(sellPrice(p.base_price), p.currency)}</td>
                 <td className="p-3 text-neutral-500">{p.seller_username ?? '—'}</td>
                 <td className="p-3">
-                  <DeleteProductButton offerId={p.offer_id} />
+                  <div className="flex items-center gap-3">
+                    <Link href={`/admin/products/${p.offer_id}/edit`} className="text-sm text-brand hover:underline">
+                      Edit
+                    </Link>
+                    <DeleteProductButton offerId={p.offer_id} />
+                  </div>
                 </td>
               </tr>
             ))}
