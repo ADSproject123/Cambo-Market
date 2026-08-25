@@ -54,9 +54,12 @@ bot.command('sync', async (ctx) => {
 bot.action('catalog_menu', (ctx) => handleShowCategoryMenu(ctx));
 bot.action(/^catalog:/, (ctx) => {
   const data = ctx.callbackQuery && 'data' in ctx.callbackQuery ? ctx.callbackQuery.data : undefined;
-  const category = data?.split(':')[1];
+  const parts = data?.split(':');
+  const category = parts?.[1];
   if (!category) return;
-  return handleShowCatalog(ctx, category);
+  const pageRaw = Number(parts?.[2]);
+  const page = Number.isInteger(pageRaw) && pageRaw > 0 ? pageRaw : 1;
+  return handleShowCatalog(ctx, category, page);
 });
 bot.action(/^product:/, (ctx) => handleProductDetailCallback(ctx));
 bot.action(/^product_buy:/, (ctx) => handleProductBuyCallback(ctx));

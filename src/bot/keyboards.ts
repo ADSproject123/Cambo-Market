@@ -9,21 +9,34 @@ export const categoryMenuKeyboard = (categories: CategorySummary[]) =>
     ]),
   );
 
-export const productListKeyboard = (products: ProductRow[], markupUsd: number) =>
-  Markup.inlineKeyboard([
+export const productListKeyboard = (
+  products: ProductRow[],
+  markupUsd: number,
+  category: string,
+  page: number,
+  totalPages: number,
+) => {
+  const navRow = [
+    ...(page > 1 ? [Markup.button.callback('◀ Prev', `catalog:${category}:${page - 1}`)] : []),
+    ...(page < totalPages ? [Markup.button.callback('Next ▶', `catalog:${category}:${page + 1}`)] : []),
+  ];
+
+  return Markup.inlineKeyboard([
     ...products.map((p) => [
       Markup.button.callback(
         `${truncate(p.title, 45)} — $${(p.base_price + markupUsd).toFixed(2)}`,
-        `product:${p.offer_id}`,
+        `product:${p.offer_id}:${page}`,
       ),
     ]),
+    ...(navRow.length > 0 ? [navRow] : []),
     [Markup.button.callback('« All categories', 'catalog_menu')],
   ]);
+};
 
-export const productDetailKeyboard = (offerId: string, category: string) =>
+export const productDetailKeyboard = (offerId: string, category: string, page = 1) =>
   Markup.inlineKeyboard([
     Markup.button.callback('✅ Buy', `product_buy:${offerId}`),
-    Markup.button.callback('« Back to list', `catalog:${category}`),
+    Markup.button.callback('« Back to list', `catalog:${category}:${page}`),
   ]);
 
 function truncate(s: string, max: number): string {

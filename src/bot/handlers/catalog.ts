@@ -25,7 +25,9 @@ export async function handleShowCategoryMenu(ctx: Context): Promise<void> {
   });
 }
 
-export async function handleShowCatalog(ctx: Context, category: string): Promise<void> {
+const CATALOG_PAGE_SIZE = 10;
+
+export async function handleShowCatalog(ctx: Context, category: string, page = 1): Promise<void> {
   await upsertUserFromCtx(ctx);
 
   let products = await listProductsByCategory(category);
@@ -48,16 +50,28 @@ export async function handleShowCatalog(ctx: Context, category: string): Promise
     return;
   }
 
-  await ctx.reply(`🛒 <b>${label}</b>\nTap a listing to see details and buy:`, {
+  const totalPages = Math.max(1, Math.ceil(products.length / CATALOG_PAGE_SIZE));
+  const currentPage = Math.min(Math.max(page, 1), totalPages);
+  const pageProducts = products.slice(
+    (currentPage - 1) * CATALOG_PAGE_SIZE,
+    currentPage * CATALOG_PAGE_SIZE,
+  );
+  const pageIndicator = totalPages > 1 ? `\nPage ${currentPage} of ${totalPages}` : '';
+
+  await ctx.reply(`🛒 <b>${label}</b>${pageIndicator}\nTap a listing to see details and buy:`, {
     parse_mode: 'HTML',
-    ...productListKeyboard(products, config.catalogMarkupUsd),
+    ...productListKeyboard(pageProducts, config.catalogMarkupUsd, category, currentPage, totalPages),
   });
 }
 
 export async function handleProductDetailCallback(ctx: Context): Promise<void> {
   const data = ctx.callbackQuery && 'data' in ctx.callbackQuery ? ctx.callbackQuery.data : undefined;
-  const offerId = data?.split(':')[1];
+  const parts = data?.split(':');
+  const offerId = parts?.[1];
   if (!offerId) return;
+
+  const pageRaw = Number(parts?.[2]);
+  const page = Number.isInteger(pageRaw) && pageRaw > 0 ? pageRaw : 1;
 
   const product = await getProduct(offerId);
   if (!product) {
@@ -78,7 +92,7 @@ export async function handleProductDetailCallback(ctx: Context): Promise<void> {
 
   await ctx.reply(lines.join('\n'), {
     parse_mode: 'HTML',
-    ...productDetailKeyboard(product.offer_id, product.category),
+    ...productDetailKeyboard(product.offer_id, product.category, page),
   });
 }
 
