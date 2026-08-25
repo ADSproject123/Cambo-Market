@@ -14,14 +14,14 @@ export async function handleLookup(ctx: Context, bot: Telegraf): Promise<void> {
   const match = text?.match(URL_RE);
 
   if (!match) {
-    await ctx.reply('Send me a product link from g2a.com or g2g.com to get a quote.');
+    await ctx.reply('Send me a product link to get a quote.');
     return;
   }
 
   const url = match[0];
   const marketplace = detectMarketplace(url);
   if (!marketplace) {
-    await ctx.reply("That link isn't from g2a.com or g2g.com — please paste a product link from one of those sites.");
+    await ctx.reply("Sorry, I can't quote that link — please paste a supported product link.");
     return;
   }
 
