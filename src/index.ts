@@ -8,7 +8,12 @@ import { CATALOG_CATEGORIES, syncAllCategories, syncCategory } from './catalogSy
 import { isAdminContext } from './bot/auth.js';
 import { handleStart } from './bot/handlers/start.js';
 import { handleLookup } from './bot/handlers/lookup.js';
-import { handleShowCatalog, handleProductDetailCallback, handleProductBuyCallback } from './bot/handlers/catalog.js';
+import {
+  handleShowCategoryMenu,
+  handleShowCatalog,
+  handleProductDetailCallback,
+  handleProductBuyCallback,
+} from './bot/handlers/catalog.js';
 import { handleBuyCallback, handleCancelCallback, handlePaymentScreenshot } from './bot/handlers/order.js';
 import { handleApproveCallback, handleRejectCallback, handleAdminReply } from './bot/handlers/admin.js';
 
@@ -26,8 +31,17 @@ bot.start((ctx) => handleStart(ctx));
 
 bot.command('sync', async (ctx) => {
   if (!isAdminContext(ctx)) return;
-  await ctx.reply(`Syncing ${CATALOG_CATEGORIES.join(', ')}…`);
-  for (const category of CATALOG_CATEGORIES) {
+
+  // "/sync <slug>" refreshes one arbitrary G2G category on demand (e.g. one
+  // just added on the web admin). Plain "/sync" refreshes every category
+  // this bot knows how to auto-scrape (CATALOG_CATEGORIES) — manually
+  // imported categories (e.g. from G2A) aren't G2G-scrapable and are
+  // intentionally left alone here; manage those via the web admin.
+  const arg = ctx.message.text.split(/\s+/)[1];
+  const categories = arg ? [arg] : CATALOG_CATEGORIES;
+
+  await ctx.reply(`Syncing ${categories.join(', ')}…`);
+  for (const category of categories) {
     try {
       const count = await syncCategory(category);
       await ctx.reply(`✅ ${category}: ${count} listings.`);
@@ -37,6 +51,7 @@ bot.command('sync', async (ctx) => {
   }
 });
 
+bot.action('catalog_menu', (ctx) => handleShowCategoryMenu(ctx));
 bot.action(/^catalog:/, (ctx) => {
   const data = ctx.callbackQuery && 'data' in ctx.callbackQuery ? ctx.callbackQuery.data : undefined;
   const category = data?.split(':')[1];

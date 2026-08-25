@@ -1,20 +1,29 @@
 import { Markup } from 'telegraf';
-import type { ProductRow } from '../db/products.js';
+import type { CategorySummary, ProductRow } from '../db/products.js';
+import { formatCategoryName } from '../format.js';
+
+export const categoryMenuKeyboard = (categories: CategorySummary[]) =>
+  Markup.inlineKeyboard(
+    categories.map((c) => [
+      Markup.button.callback(`${formatCategoryName(c.category)} (${c.count})`, `catalog:${c.category}`),
+    ]),
+  );
 
 export const productListKeyboard = (products: ProductRow[], markupUsd: number) =>
-  Markup.inlineKeyboard(
-    products.map((p) => [
+  Markup.inlineKeyboard([
+    ...products.map((p) => [
       Markup.button.callback(
         `${truncate(p.title, 45)} — $${(p.base_price + markupUsd).toFixed(2)}`,
         `product:${p.offer_id}`,
       ),
     ]),
-  );
+    [Markup.button.callback('« All categories', 'catalog_menu')],
+  ]);
 
-export const productDetailKeyboard = (offerId: string) =>
+export const productDetailKeyboard = (offerId: string, category: string) =>
   Markup.inlineKeyboard([
     Markup.button.callback('✅ Buy', `product_buy:${offerId}`),
-    Markup.button.callback('« Back to list', 'catalog:google-accounts'),
+    Markup.button.callback('« Back to list', `catalog:${category}`),
   ]);
 
 function truncate(s: string, max: number): string {

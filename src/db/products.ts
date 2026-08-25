@@ -59,3 +59,32 @@ export async function getProduct(offerId: string): Promise<ProductRow | null> {
   if (error) throw error;
   return data as ProductRow | null;
 }
+
+export interface CategorySummary {
+  category: string;
+  count: number;
+  cheapestPrice: number;
+  currency: string;
+}
+
+/** Distinct categories currently stocked, for the /start browsing menu — source-agnostic, includes manually-imported (e.g. G2A) categories too. */
+export async function listCategories(): Promise<CategorySummary[]> {
+  const { data, error } = await supabase.from('products').select('category, base_price, currency');
+  if (error) throw error;
+
+  const byCategory = new Map<string, { count: number; cheapestPrice: number; currency: string }>();
+  for (const row of (data as { category: string; base_price: number; currency: string }[]) ?? []) {
+    const existing = byCategory.get(row.category);
+    if (!existing || row.base_price < existing.cheapestPrice) {
+      byCategory.set(row.category, {
+        count: (existing?.count ?? 0) + 1,
+        cheapestPrice: row.base_price,
+        currency: row.currency,
+      });
+    } else {
+      existing.count += 1;
+    }
+  }
+
+  return Array.from(byCategory.entries()).map(([category, v]) => ({ category, ...v }));
+}

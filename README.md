@@ -13,11 +13,12 @@ an order placed on the web shows up for admins next to Telegram orders. See
 
 ## How it works
 
-1. Buyer sends `/start` → bot shows the **Google Accounts** catalog (scraped
-   from `g2g.com/categories/google-accounts`) as a list of tappable listings,
-   each priced at the real G2G price **+ $1** (`CATALOG_MARKUP_USD`).
-2. Buyer taps a listing → sees title, price, seller, rating, with **Buy** /
-   **Back to list** buttons.
+1. Buyer sends `/start` → bot shows a **category menu** (whatever's currently
+   in the `products` table — scraped from G2G or imported from anywhere
+   else, e.g. G2A), each priced at cost **+ $1** (`CATALOG_MARKUP_USD`).
+2. Buyer taps a category → sees its listings; taps one → sees title, price,
+   seller, rating, with **Buy** / **Back to list** buttons (and **« All
+   categories** from the list view).
 3. Buyer taps **Buy** → bot marks the order `awaiting_payment` and sends your
    QR code image with the exact amount and your payment instructions.
 4. Buyer uploads a screenshot after paying → bot forwards it to your admin
@@ -52,18 +53,23 @@ same serialization library SvelteKit uses to produce it).
 This was confirmed by testing against the live site, not assumed — see the
 scraping reality check below for what does/doesn't work and why.
 
-**Refreshing the catalog**: an admin can run `/sync` in the admin chat at any
-time to re-scrape and update prices/stock. The bot also does one sync on
-startup. There's no automatic polling interval — add one (e.g. a `setInterval`
-around `syncAllCategories()` in `src/index.ts`) if you want it to stay fresh
-without a manual `/sync`, but weigh that against scraping-frequency risk (see
-below).
+**Refreshing the catalog**: an admin can run `/sync` (no args) in the admin
+chat to re-scrape every category listed in `CATALOG_CATEGORIES` in
+[`src/catalogSync.ts`](src/catalogSync.ts) — currently `google-accounts` and
+`cnva-accounts`, the two categories confirmed scrapable from G2G. The bot
+also does this once on startup. Run `/sync <slug>` to pull in one more G2G
+category on demand without touching that list. There's no automatic polling
+interval — add one (e.g. a `setInterval` around `syncAllCategories()` in
+`src/index.ts`) if you want it to stay fresh without a manual `/sync`, but
+weigh that against scraping-frequency risk (see below).
 
-**Adding more categories**: add the category slug (from its G2G URL) to
-`CATALOG_CATEGORIES` in [`src/catalogSync.ts`](src/catalogSync.ts), then
-`/sync`. Each category needs its own catalog button/entry point in the bot if
-you want buyers to browse more than one — currently only `/start` → Google
-Accounts is wired up, since that's the only category asked for so far.
+**Categories from elsewhere (e.g. G2A)**: the browsing menu is driven
+directly by whatever's in the `products` table (`listCategories()` in
+`src/db/products.ts`), not by `CATALOG_CATEGORIES` — so a category populated
+by hand or imported from a site the scraper can't reach (G2A is blocked from
+most server IPs, see below) still shows up and is fully sellable, it just
+won't get auto-refreshed by `/sync`. Manage those via the web admin's Add
+product / bulk import instead.
 
 ## Important: scraping reality check
 
@@ -151,8 +157,6 @@ supabase/schema.sql        run once in the Supabase SQL editor
 
 ## Known limitations / next steps
 
-- Only `google-accounts` is catalogued right now, per current scope — see
-  "Adding more categories" above.
 - No automatic refresh interval — `/sync` is manual (plus one sync on
   startup). Add a timer if you want it hands-off, but scraping too often
   raises the odds of getting rate-limited/blocked.
