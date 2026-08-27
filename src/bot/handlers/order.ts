@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import type { Context, Telegraf } from 'telegraf';
-import { config } from '../../config.js';
-import { findLatestOrderByUserAndStatus, getOrder, updateOrder } from '../../db/orders.js';
-import type { OrderRow } from '../../db/types.js';
-import { formatMoney } from '../../pricing.js';
+import { config } from '../../lib/config.js';
+import { findLatestOrderByUserAndStatus, getOrder, updateOrder } from '../../lib/db/orders.js';
+import type { OrderRow } from '../../lib/db/orders.js';
+import { formatMoney } from '../../lib/pricing.js';
 import { notifyAdminsWithPhoto } from '../notifyAdmins.js';
 import { approveRejectKeyboard, cancelOnlyKeyboard } from '../keyboards.js';
 
@@ -40,7 +40,7 @@ export async function handleBuyCallback(ctx: Context): Promise<void> {
   if (!orderId) return;
 
   const order = await getOrder(orderId);
-  if (!order || order.telegram_user_id !== ctx.from?.id) {
+  if (!order || order.telegram_user_id! !== ctx.from?.id) {
     await ctx.answerCbQuery('Order not found.');
     return;
   }
@@ -59,7 +59,7 @@ export async function handleCancelCallback(ctx: Context): Promise<void> {
   if (!orderId) return;
 
   const order = await getOrder(orderId);
-  if (!order || order.telegram_user_id !== ctx.from?.id) {
+  if (!order || order.telegram_user_id! !== ctx.from?.id) {
     await ctx.answerCbQuery('Order not found.');
     return;
   }

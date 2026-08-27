@@ -1,28 +1,37 @@
 {
-  "name": "cheap-staff-bot",
+  "name": "cambo-market",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Telegram middleman bot for buying G2A/G2G listings via manual admin fulfillment",
+  "description": "Telegram middleman bot & Next.js storefront",
   "scripts": {
-    "dev": "concurrently -n bot,web -c blue,green \"npm:dev:bot\" \"npm:dev:web\"",
-    "dev:bot": "tsx watch src/index.ts",
-    "dev:web": "npm run dev --prefix web",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
-    "typecheck": "tsc --noEmit"
+    "dev": "concurrently -n web,bot -c green,blue \"next dev\" \"tsx watch src/bot/index.ts\"",
+    "build": "next build",
+    "bot": "tsx watch src/bot/index.ts",
+    "start": "concurrently -n web,bot -c green,blue \"next start\" \"tsx src/bot/index.ts\"",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.45.4",
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.112.3",
     "cheerio": "^1.0.0",
     "devalue": "^5.9.1",
     "dotenv": "^16.4.5",
+    "next": "16.3.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "telegraf": "^4.16.3",
-    "undici": "^6.19.8"
+    "undici": "^8.10.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^22.5.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "concurrently": "^10.0.5",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.2",
+    "tailwindcss": "^4",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }

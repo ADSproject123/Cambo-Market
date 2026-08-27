@@ -1,6 +1,6 @@
 import type { Context, Telegraf } from 'telegraf';
-import { findOrderByAdminMessage, getOrder, updateOrder } from '../../db/orders.js';
-import { applyServiceFee, formatMoney } from '../../pricing.js';
+import { findOrderByAdminMessage, getOrder, updateOrder } from '../../lib/db/orders.js';
+import { applyServiceFee, formatMoney } from '../../lib/pricing.js';
 import { isAdminContext } from '../auth.js';
 import { buyOrCancelKeyboard } from '../keyboards.js';
 import { shortRef } from './order.js';
@@ -28,7 +28,7 @@ export async function handleApproveCallback(ctx: Context): Promise<void> {
   );
 
   await ctx.telegram.sendMessage(
-    order.telegram_user_id,
+    order.telegram_user_id!,
     `✅ Payment confirmed for order ${shortRef(order.id)}! We're purchasing your item now — you'll receive it here shortly.`,
   );
 }
@@ -54,7 +54,7 @@ export async function handleRejectCallback(ctx: Context): Promise<void> {
   await ctx.reply(`❌ Order ${shortRef(order.id)} rejected.`);
 
   await ctx.telegram.sendMessage(
-    order.telegram_user_id,
+    order.telegram_user_id!,
     `❌ We couldn't verify your payment for order ${shortRef(order.id)}. Please contact support or send a clearer screenshot.`,
   );
 }
@@ -83,7 +83,7 @@ export async function handleAdminReply(ctx: Context, _bot: Telegraf): Promise<vo
     await ctx.reply(`Quoted ${formatMoney(total, order.currency)} to the buyer for order ${shortRef(order.id)}.`);
 
     await ctx.telegram.sendMessage(
-      order.telegram_user_id,
+      order.telegram_user_id!,
       [
         `💬 An admin quoted a price for your order ${shortRef(order.id)}:`,
         `Total to pay (incl. service fee): <b>${formatMoney(total, order.currency)}</b>`,
@@ -98,7 +98,7 @@ export async function handleAdminReply(ctx: Context, _bot: Telegraf): Promise<vo
     await ctx.reply(`Delivered to buyer for order ${shortRef(order.id)}. ✅`);
 
     await ctx.telegram.sendMessage(
-      order.telegram_user_id,
+      order.telegram_user_id!,
       [`🎁 Order ${shortRef(order.id)} fulfilled! Here's your item:`, '', replyText].join('\n'),
     );
     return;

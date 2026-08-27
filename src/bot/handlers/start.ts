@@ -1,5 +1,5 @@
 import type { Context } from 'telegraf';
-import { upsertUserFromCtx } from '../../db/users.js';
+import { upsertUserFromCtx } from '../../lib/db/users.js';
 import { handleShowCategoryMenu } from './catalog.js';
 
 export async function handleStart(ctx: Context): Promise<void> {

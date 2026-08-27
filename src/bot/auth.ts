@@ -1,5 +1,5 @@
 import type { Context } from 'telegraf';
-import { config } from '../config.js';
+import { config } from '../lib/config.js';
 
 /** True if this update comes from an admin: either a configured staff group chat, or a configured individual admin's DM. */
 export function isAdminContext(ctx: Context): boolean {

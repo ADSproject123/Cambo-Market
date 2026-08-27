@@ -1,9 +1,9 @@
 import type { Context, Telegraf } from 'telegraf';
-import { config } from '../../config.js';
-import { createOrder } from '../../db/orders.js';
-import { upsertUserFromCtx } from '../../db/users.js';
-import { applyServiceFee, formatMoney } from '../../pricing.js';
-import { detectMarketplace, scrapeProduct } from '../../scrapers/index.js';
+import { config } from '../../lib/config.js';
+import { createOrder } from '../../lib/db/orders.js';
+import { upsertUserFromCtx } from '../../lib/db/users.js';
+import { applyServiceFee, formatMoney } from '../../lib/pricing.js';
+import { detectMarketplace, scrapeProduct } from '../../lib/scrapers/index.js';
 import { notifyAdmins } from '../notifyAdmins.js';
 import { buyOrCancelKeyboard } from '../keyboards.js';
 
