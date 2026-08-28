@@ -20,7 +20,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold">Search results for "{q}"</h1>
+      <h1 className="mb-6 text-2xl font-bold dark:text-white">Search results for "{q}"</h1>
       {groups.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 py-24 text-center dark:border-neutral-800 dark:bg-neutral-900/50">
           <p className="text-lg font-medium text-neutral-600 dark:text-neutral-400">No products found matching "{q}"</p>

@@ -78,7 +78,7 @@ export function CategoryFilters() {
                   placeholder="Min" 
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
-                  className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none transition-colors focus:border-brand focus:bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-brand"
+                  className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-900 outline-none transition-colors focus:border-brand focus:bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:focus:border-brand"
                 />
                 <span className="text-neutral-400">-</span>
                 <input 
@@ -86,7 +86,7 @@ export function CategoryFilters() {
                   placeholder="Max" 
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none transition-colors focus:border-brand focus:bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-brand"
+                  className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-900 outline-none transition-colors focus:border-brand focus:bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:focus:border-brand"
                 />
               </div>
             </div>

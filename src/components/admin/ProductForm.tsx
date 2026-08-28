@@ -62,7 +62,7 @@ export default function ProductForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 rounded-lg border border-neutral-200 bg-white p-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
       <input
         required
         placeholder="Category slug (e.g. google-accounts)"

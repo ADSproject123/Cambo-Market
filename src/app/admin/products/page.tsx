@@ -10,16 +10,16 @@ export default async function AdminProductsPage() {
 
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-bold">Products</h1>
+      <h1 className="mb-6 text-2xl font-bold dark:text-white">Products</h1>
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <SyncCategoryForm />
         <AddProductForm />
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white">
-        <table className="w-full text-sm">
-          <thead className="border-b border-neutral-200 text-left text-neutral-500">
+      <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+        <table className="w-full text-left text-sm">
+          <thead className="border-b border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900/50">
             <tr>
               <th className="p-3">Title</th>
               <th className="p-3">Category</th>
@@ -30,16 +30,16 @@ export default async function AdminProductsPage() {
               <th className="p-3"></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
             {products.map((p) => (
-              <tr key={p.offer_id} className="border-b border-neutral-100 last:border-0">
-                <td className="p-3">{p.title}</td>
+              <tr key={p.offer_id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                <td className="p-3 dark:text-white">{p.title}</td>
                 <td className="p-3 text-neutral-500">{p.category}</td>
                 <td className="p-3 text-neutral-500">
                   {p.variant_group ? `${p.variant_group} · ${p.variant_label ?? '—'}` : '—'}
                 </td>
-                <td className="p-3">{formatMoney(p.base_price, p.currency)}</td>
-                <td className="p-3 font-medium">{formatMoney(sellPrice(p.base_price), p.currency)}</td>
+                <td className="p-3 dark:text-neutral-300">{formatMoney(p.base_price, p.currency)}</td>
+                <td className="p-3 font-medium dark:text-white">{formatMoney(sellPrice(p.base_price), p.currency)}</td>
                 <td className="p-3 text-neutral-500">{p.seller_username ?? '—'}</td>
                 <td className="p-3">
                   <div className="flex items-center gap-3">
