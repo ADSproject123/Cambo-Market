@@ -15,43 +15,51 @@ export const metadata: Metadata = {
   icons: { icon: '/logo.jpeg' },
 };
 
+import { ThemeProvider } from '@/components/ThemeProvider';
+import { ThemeToggle } from '@/components/ThemeToggle';
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-black">
-        <header className="border-b border-neutral-200 bg-white">
-          <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
-            <Link href="/" className="flex items-center gap-2 text-lg font-bold">
-              <Image src="/logo.jpeg" alt="Cambo Market" width={36} height={36} className="rounded" priority />
-              Cambo Market
-            </Link>
-            <div className="flex items-center gap-5 text-sm font-medium">
-              {user ? (
-                <>
-                  <Link href="/orders" className="hover:text-brand">My orders</Link>
-                  {user.role === 'admin' && (
-                    <Link href="/admin" className="hover:text-brand">Admin</Link>
-                  )}
-                  <span className="text-neutral-500">{user.email}</span>
-                  <SignOutButton />
-                </>
-              ) : (
-                <>
-                  <Link href="/login" className="hover:text-brand">Log in</Link>
-                  <Link
-                    href="/signup"
-                    className="rounded-full bg-black px-4 py-2 text-white hover:bg-brand"
-                  >
-                    Sign up
-                  </Link>
-                </>
-              )}
-            </div>
-          </nav>
-        </header>
-        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">{children}</main>
+    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-neutral-50 text-neutral-900 selection:bg-brand selection:text-white dark:bg-neutral-950 dark:text-neutral-50">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <header className="sticky top-0 z-50 border-b border-neutral-200/50 bg-white/70 backdrop-blur-md shadow-sm transition-all duration-300 dark:border-neutral-800/50 dark:bg-neutral-950/70">
+            <nav className="mx-auto flex w-full items-center justify-between gap-4 px-4 sm:px-8 py-4">
+              <Link href="/" className="group flex items-center gap-3 text-xl font-bold tracking-tight">
+                <div className="overflow-hidden rounded-lg shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-brand/20">
+                  <Image src="/logo.jpeg" alt="Cambo Market" width={40} height={40} priority />
+                </div>
+                <span className="hidden bg-gradient-to-br from-neutral-900 to-neutral-600 bg-clip-text text-transparent dark:from-white dark:to-neutral-400 sm:block">Cambo Market</span>
+              </Link>
+              
+              <div className="flex items-center gap-4 text-sm font-medium sm:gap-6">
+                <ThemeToggle />
+                {user ? (
+                  <>
+                    <Link href="/orders" className="transition-colors hover:text-brand">My orders</Link>
+                    {user.role === 'admin' && (
+                      <Link href="/admin" className="hidden transition-colors hover:text-brand sm:inline">Admin</Link>
+                    )}
+                    <SignOutButton />
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className="hidden transition-colors hover:text-brand sm:inline">Log in</Link>
+                    <Link
+                      href="/signup"
+                      className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-white shadow-sm transition-all hover:bg-brand hover:shadow-md hover:shadow-brand/20 active:scale-95 dark:bg-white dark:text-neutral-900 dark:hover:bg-brand dark:hover:text-white"
+                    >
+                      Sign up
+                    </Link>
+                  </>
+                )}
+              </div>
+            </nav>
+          </header>
+          <main className="mx-auto w-full flex-1 px-4 sm:px-8 py-8 sm:py-12 animate-[fade-in-up_0.6s_ease-out]">{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );

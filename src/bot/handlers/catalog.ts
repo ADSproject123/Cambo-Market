@@ -30,14 +30,14 @@ const CATALOG_PAGE_SIZE = 10;
 export async function handleShowCatalog(ctx: Context, category: string, page = 1): Promise<void> {
   await upsertUserFromCtx(ctx);
 
-  let products = await listProducts(category);
+  let products = await listProducts({ category });
   if (products.length === 0) {
     // Nothing cached yet (e.g. first run before any /sync) — try one live fetch.
     // Only works for categories G2G can actually serve; manually-imported
     // (e.g. G2A) categories just fall through to the empty-state message.
     try {
       await syncCategory(category);
-      products = await listProducts(category);
+      products = await listProducts({ category });
     } catch {
       // fall through to the empty-state message below
     }

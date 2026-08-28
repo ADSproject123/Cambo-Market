@@ -1,4 +1,5 @@
 import type { ProductRow } from './db/products';
+import { getLogoForCategory } from './logos';
 
 export interface ProductGroup {
   /** offer_id of the cheapest variant — what the card links to (/products/[offerId]). */
@@ -33,7 +34,7 @@ export function groupProductsForDisplay(products: ProductRow[]): ProductGroup[] 
         cheapestPrice: cheapest.base_price,
         currency: cheapest.currency,
         variantCount: items.length,
-        imageUrl: items.find((p) => p.image_url)?.image_url ?? null,
+        imageUrl: getLogoForCategory(cheapest.category, cheapest.title) || items.find((p) => p.image_url)?.image_url || null,
         sellerUsername: cheapest.seller_username,
         sellerVerified: cheapest.seller_verified,
         rating: cheapest.rating,

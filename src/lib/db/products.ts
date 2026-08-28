@@ -23,14 +23,30 @@ export interface ProductRow {
   created_at: string;
 }
 
-export async function listProducts(category?: string): Promise<ProductRow[]> {
+export interface ListProductsOptions {
+  category?: string;
+  searchQuery?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  verifiedOnly?: boolean;
+}
+
+export async function listProducts(options: ListProductsOptions = {}): Promise<ProductRow[]> {
   const db = createAdminClient();
   let query = db.from('products').select().order('category').order('base_price', { ascending: true });
-  if (category) query = query.eq('category', category);
+  
+  if (options.category) query = query.eq('category', options.category);
+  if (options.searchQuery) query = query.ilike('title', `%${options.searchQuery}%`);
+  if (options.minPrice !== undefined) query = query.gte('base_price', options.minPrice);
+  if (options.maxPrice !== undefined) query = query.lte('base_price', options.maxPrice);
+  if (options.verifiedOnly) query = query.eq('seller_verified', true);
+  
   const { data, error } = await query;
   if (error) throw error;
   return (data as ProductRow[]) ?? [];
 }
+
+import { getLogoForCategory } from '../logos';
 
 export interface CategorySummary {
   category: string;
@@ -41,8 +57,8 @@ export interface CategorySummary {
 }
 
 /** Distinct categories currently stocked, cheapest-price-first within each, for the storefront landing page. */
-export async function listCategories(): Promise<CategorySummary[]> {
-  const products = await listProducts();
+export async function listCategories(options?: ListProductsOptions): Promise<CategorySummary[]> {
+  const products = await listProducts(options);
   const byCategory = new Map<string, ProductRow[]>();
 
   for (const p of products) {
@@ -58,7 +74,7 @@ export async function listCategories(): Promise<CategorySummary[]> {
       count: items.length,
       cheapestPrice: cheapest.base_price,
       currency: cheapest.currency,
-      imageUrl: items.find((p) => p.image_url)?.image_url ?? null,
+      imageUrl: getLogoForCategory(category, items[0].title) || items.find((p) => p.image_url)?.image_url || null,
     };
   });
 }
@@ -78,7 +94,10 @@ export async function getProduct(offerId: string): Promise<ProductRow | null> {
 export async function getProductVariants(offerId: string): Promise<ProductRow[]> {
   const product = await getProduct(offerId);
   if (!product) return [];
-  if (!product.variant_group) return [product];
+  if (!product.variant_group) {
+    product.image_url = getLogoForCategory(product.category, product.title) || product.image_url;
+    return [product];
+  }
 
   const db = createAdminClient();
   const { data, error } = await db
@@ -87,7 +106,12 @@ export async function getProductVariants(offerId: string): Promise<ProductRow[]>
     .eq('variant_group', product.variant_group)
     .order('base_price', { ascending: true });
   if (error) throw error;
-  return (data as ProductRow[]) ?? [product];
+  
+  const products = (data as ProductRow[]) ?? [product];
+  return products.map(p => ({
+    ...p,
+    image_url: getLogoForCategory(p.category, p.title) || p.image_url
+  }));
 }
 
 export async function upsertScrapedProducts(category: string, offers: G2GCatalogOffer[]): Promise<void> {
