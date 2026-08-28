@@ -70,11 +70,11 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-light/0 to-brand-light/0 transition-all duration-500 group-hover:from-brand-light/5 group-hover:to-transparent" />
                 
                 <div className="relative z-10">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-50 p-2 shadow-sm dark:bg-neutral-800/50">
+                  <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-neutral-50 p-3 shadow-sm transition-transform duration-300 group-hover:scale-110 dark:bg-neutral-800/50">
                     {c.imageUrl ? (
                       <img src={c.imageUrl} alt={c.category} className="h-full w-full object-contain drop-shadow-sm" />
                     ) : (
-                      <span className="text-2xl">✨</span>
+                      <span className="text-3xl">✨</span>
                     )}
                   </div>
                   <h3 className="text-xl font-bold text-neutral-900 transition-colors group-hover:text-brand-dark dark:text-neutral-100 dark:group-hover:text-brand-light">{formatCategoryName(c.category)}</h3>
