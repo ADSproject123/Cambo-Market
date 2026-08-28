@@ -31,11 +31,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           
           <div className="relative z-10 flex h-64 items-center justify-center">
             {variants[0].image_url ? (
-              <img 
-                src={variants[0].image_url} 
-                alt={variants[0].title} 
-                className="h-48 w-48 object-contain drop-shadow-xl"
-              />
+              <div className="flex h-56 w-56 items-center justify-center rounded-[2rem] bg-white p-6 shadow-2xl ring-1 ring-neutral-200/50 dark:ring-white/10">
+                <img 
+                  src={variants[0].image_url} 
+                  alt={variants[0].title} 
+                  className="h-full w-full object-contain"
+                />
+              </div>
             ) : (
               <div className="text-center">
                 <span className="text-6xl text-brand drop-shadow-sm">✨</span>

@@ -38,9 +38,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               <div className="absolute inset-0 bg-gradient-to-br from-brand-light/0 to-brand-light/0 transition-all duration-500 group-hover:from-brand-light/5 group-hover:to-transparent" />
               
               <div className="relative z-10">
-                <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-neutral-50 p-3 shadow-sm transition-transform duration-300 group-hover:scale-110 dark:bg-neutral-800/50">
+                <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-neutral-50 p-3 shadow-sm ring-1 ring-neutral-200/50 transition-transform duration-300 group-hover:scale-110 dark:bg-white dark:ring-white/20">
                   {g.imageUrl ? (
-                    <img src={g.imageUrl} alt={g.title} className="h-full w-full object-contain drop-shadow-sm" />
+                    <img src={g.imageUrl} alt={g.title} className="h-full w-full object-contain" />
                   ) : (
                     <span className="text-3xl">✨</span>
                   )}
