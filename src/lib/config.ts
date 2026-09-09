@@ -25,4 +25,5 @@ export const config = {
   catalogMarkupUsd: Number(process.env.CATALOG_MARKUP_USD ?? '1'),
   defaultCurrency: process.env.DEFAULT_CURRENCY || 'USD',
   scraperProxyUrl: process.env.SCRAPER_PROXY_URL || undefined,
+  webAppUrl: process.env.WEB_APP_URL || 'https://example.com',
 } as const;

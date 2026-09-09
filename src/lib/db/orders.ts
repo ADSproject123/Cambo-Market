@@ -44,10 +44,13 @@ export interface CreateWebOrderInput {
 
 export async function createWebOrder(input: CreateWebOrderInput): Promise<OrderRow> {
   const db = createAdminClient();
+  const isTgUser = input.webUserId.startsWith('tg_');
+  
   const { data, error } = await db
     .from('orders')
     .insert({
-      web_user_id: input.webUserId,
+      web_user_id: isTgUser ? null : input.webUserId,
+      telegram_user_id: isTgUser ? parseInt(input.webUserId.slice(3), 10) : null,
       marketplace: 'g2g',
       product_url: input.productUrl,
       product_title: input.productTitle,
@@ -73,11 +76,17 @@ export async function getOrder(id: string): Promise<OrderRow | null> {
 
 export async function listOrdersForUser(webUserId: string): Promise<OrderRow[]> {
   const db = createAdminClient();
-  const { data, error } = await db
-    .from('orders')
-    .select()
-    .eq('web_user_id', webUserId)
-    .order('created_at', { ascending: false });
+  const isTgUser = webUserId.startsWith('tg_');
+  
+  let query = db.from('orders').select().order('created_at', { ascending: false });
+  
+  if (isTgUser) {
+    query = query.eq('telegram_user_id', parseInt(webUserId.slice(3), 10));
+  } else {
+    query = query.eq('web_user_id', webUserId);
+  }
+
+  const { data, error } = await query;
   if (error) throw error;
   return (data as OrderRow[]) ?? [];
 }

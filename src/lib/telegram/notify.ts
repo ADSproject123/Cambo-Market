@@ -1,5 +1,7 @@
-const BOT_TOKEN = process.env.BOT_TOKEN;
+import { config } from '../config';
+import { createAdminClient } from '../supabase/admin';
 
+const BOT_TOKEN = process.env.BOT_TOKEN;
 /**
  * Sends a plain message to a Telegram chat via the raw Bot API (no telegraf
  * dependency needed for this one-way notification). Used when an admin
@@ -39,4 +41,72 @@ export async function fetchTelegramFile(fileId: string): Promise<{ contentType: 
   if (!fileRes.ok || !fileRes.body) return null;
 
   return { contentType: fileRes.headers.get('content-type') ?? 'image/jpeg', body: fileRes.body };
+}
+
+/** Broadcasts a message to all admin chats using raw HTTP API (for web-originated flows). */
+export async function notifyAdminsRaw(orderId: string, text: string): Promise<void> {
+  if (!BOT_TOKEN) return;
+  let primary: { chatId: number; messageId: number } | undefined;
+
+  for (const chatId of config.adminChatIds) {
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (!primary && data.result) {
+          primary = { chatId, messageId: data.result.message_id };
+        }
+      } else {
+        console.error('Failed to notify admin', await res.text());
+      }
+    } catch (err) {
+      console.error(`Failed to notify admin chat ${chatId}`, err);
+    }
+  }
+
+  if (primary) {
+    const db = createAdminClient();
+    await db.from('orders').update({
+      admin_notify_chat_id: primary.chatId,
+      admin_notify_message_id: primary.messageId,
+    }).eq('id', orderId);
+  }
+}
+
+/** Broadcasts a photo to all admin chats using raw HTTP API (for web-originated payment proofs). */
+export async function notifyAdminsPhotoRaw(orderId: string, photoUrl: string, caption: string): Promise<void> {
+  if (!BOT_TOKEN) return;
+  let primary: { chatId: number; messageId: number } | undefined;
+
+  for (const chatId of config.adminChatIds) {
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, photo: photoUrl, caption, parse_mode: 'HTML' }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (!primary && data.result) {
+          primary = { chatId, messageId: data.result.message_id };
+        }
+      } else {
+        console.error('Failed to notify admin with photo', await res.text());
+      }
+    } catch (err) {
+      console.error(`Failed to notify admin chat ${chatId} with photo`, err);
+    }
+  }
+
+  if (primary) {
+    const db = createAdminClient();
+    await db.from('orders').update({
+      admin_notify_chat_id: primary.chatId,
+      admin_notify_message_id: primary.messageId,
+    }).eq('id', orderId);
+  }
 }

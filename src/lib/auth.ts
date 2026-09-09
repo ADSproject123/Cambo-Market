@@ -1,5 +1,8 @@
 import { createClient } from './supabase/server';
 import { createAdminClient } from './supabase/admin';
+import { cookies } from 'next/headers';
+import crypto from 'crypto';
+import { config } from './config';
 
 export type Role = 'client' | 'admin';
 
@@ -15,12 +18,27 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return null;
+  
+  if (user) {
+    const admin = createAdminClient();
+    const { data: profile } = await admin.from('profiles').select('role').eq('id', user.id).maybeSingle();
+    return { id: user.id, email: user.email ?? null, role: (profile?.role as Role) ?? 'client' };
+  }
 
-  const admin = createAdminClient();
-  const { data: profile } = await admin.from('profiles').select('role').eq('id', user.id).maybeSingle();
+  // Check for Telegram Mini App session
+  const cookieStore = await cookies();
+  const tgSession = cookieStore.get('tg_session')?.value;
+  if (tgSession) {
+    const [telegramId, signature] = tgSession.split('.');
+    if (telegramId && signature) {
+      const expectedSignature = crypto.createHmac('sha256', config.botToken).update(telegramId).digest('hex');
+      if (signature === expectedSignature) {
+        return { id: `tg_${telegramId}`, email: null, role: 'client' };
+      }
+    }
+  }
 
-  return { id: user.id, email: user.email ?? null, role: (profile?.role as Role) ?? 'client' };
+  return null;
 }
 
 /** Throws if nobody's logged in, or if they don't have the required role. Use in route handlers/server actions before touching data. */

@@ -1,16 +1,18 @@
 import type { Context } from 'telegraf';
+import { Markup } from 'telegraf';
 import { upsertUserFromCtx } from '../../lib/db/users.js';
-import { handleShowCategoryMenu } from './catalog.js';
+import { config } from '../../lib/config.js';
 
 export async function handleStart(ctx: Context): Promise<void> {
   await upsertUserFromCtx(ctx);
   await ctx.reply(
     [
-      '👋 Welcome!',
+      '👋 Welcome to Cambo Market!',
       '',
-      'Browse a category, tap a listing to see the price, then Buy.',
-      "I'll show you a QR code to pay — upload a screenshot of your payment after, and once an admin confirms it, we buy the item for you and deliver it here.",
+      'Click the button below to open our Mini App and browse the full catalog directly inside Telegram.',
     ].join('\n'),
+    Markup.inlineKeyboard([
+      Markup.button.webApp('🛒 Open Mini App', config.webAppUrl)
+    ])
   );
-  await handleShowCategoryMenu(ctx);
 }

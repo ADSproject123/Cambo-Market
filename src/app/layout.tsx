@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -15,8 +15,16 @@ export const metadata: Metadata = {
   icons: { icon: '/logo.jpeg' },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { TelegramProvider } from '@/components/TelegramProvider';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
@@ -25,7 +33,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-neutral-50 text-neutral-900 selection:bg-brand selection:text-white dark:bg-neutral-950 dark:text-neutral-50">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <header className="sticky top-0 z-50 border-b border-neutral-200/50 bg-white/70 backdrop-blur-md shadow-sm transition-all duration-300 dark:border-neutral-800/50 dark:bg-neutral-950/70">
+          <TelegramProvider>
+            <header className="sticky top-0 z-50 border-b border-neutral-200/50 bg-white/70 backdrop-blur-md shadow-sm transition-all duration-300 dark:border-neutral-800/50 dark:bg-neutral-950/70">
             <nav className="mx-auto flex w-full items-center justify-between gap-4 px-4 sm:px-8 py-4">
               <Link href="/" className="group flex items-center gap-3 text-xl font-bold tracking-tight">
                 <div className="overflow-hidden rounded-lg shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-brand/20">
@@ -59,6 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </nav>
           </header>
           <main className="mx-auto w-full flex-1 px-4 sm:px-8 py-8 sm:py-12 animate-[fade-in-up_0.6s_ease-out]">{children}</main>
+          </TelegramProvider>
         </ThemeProvider>
       </body>
     </html>

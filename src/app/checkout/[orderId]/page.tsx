@@ -13,7 +13,10 @@ export default async function CheckoutPage({ params }: { params: Promise<{ order
   if (!user) redirect('/login');
 
   const order = await getOrder(orderId);
-  if (!order || order.web_user_id !== user.id) notFound();
+  const isOwner = order && (user.id.startsWith('tg_') 
+    ? order.telegram_user_id === parseInt(user.id.slice(3), 10)
+    : order.web_user_id === user.id);
+  if (!order || !isOwner) notFound();
 
   return (
     <div className="max-w-md">
