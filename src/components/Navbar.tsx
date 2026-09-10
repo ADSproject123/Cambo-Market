@@ -43,7 +43,7 @@ export function Navbar({ user }: NavbarProps) {
               <Link href="/login" className="hidden transition-colors hover:text-brand sm:inline">Log in</Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-white shadow-sm transition-all hover:bg-brand hover:shadow-md hover:shadow-brand/20 active:scale-95 dark:bg-card dark:text-foreground dark:hover:bg-brand dark:hover:text-white"
+                className="inline-flex items-center justify-center rounded-full bg-green-600 px-5 py-2 text-white font-semibold shadow-sm transition-all hover:bg-green-500 hover:shadow-md hover:shadow-green-500/20 active:scale-95"
               >
                 Sign up
               </Link>
