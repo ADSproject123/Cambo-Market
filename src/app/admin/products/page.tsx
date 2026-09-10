@@ -17,9 +17,9 @@ export default async function AdminProductsPage() {
         <AddProductForm />
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="overflow-x-auto rounded-lg border border-border bg-card">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900/50">
+          <thead className="border-b border-border bg-background text-neutral-500">
             <tr>
               <th className="p-3">Title</th>
               <th className="p-3">Category</th>
@@ -32,7 +32,7 @@ export default async function AdminProductsPage() {
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
             {products.map((p) => (
-              <tr key={p.offer_id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+              <tr key={p.offer_id} className="hover:bg-background dark:hover:bg-neutral-800/50">
                 <td className="p-3 dark:text-white">{p.title}</td>
                 <td className="p-3 text-neutral-500">{p.category}</td>
                 <td className="p-3 text-neutral-500">

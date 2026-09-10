@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import type { Context, Telegraf } from 'telegraf';
-import { config } from '../../lib/config.js';
-import { findLatestOrderByUserAndStatus, getOrder, updateOrder } from '../../lib/db/orders.js';
-import type { OrderRow } from '../../lib/db/orders.js';
-import { formatMoney } from '../../lib/pricing.js';
-import { notifyAdminsWithPhoto } from '../notifyAdmins.js';
-import { approveRejectKeyboard, cancelOnlyKeyboard } from '../keyboards.js';
+import { config } from '../../lib/config';
+import { findLatestOrderByUserAndStatus, getOrder, updateOrder } from '../../lib/db/orders';
+import type { OrderRow } from '../../lib/db/orders';
+import { formatMoney } from '../../lib/pricing';
+import { notifyAdminsWithPhoto } from '../notifyAdmins';
+import { approveRejectKeyboard, cancelOnlyKeyboard } from '../keyboards';
 
 function shortRef(orderId: string): string {
   return orderId.slice(0, 8).toUpperCase();

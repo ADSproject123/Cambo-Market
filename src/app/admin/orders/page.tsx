@@ -21,7 +21,7 @@ export default async function AdminOrdersPage() {
       <h1 className="mb-6 text-2xl font-bold">Orders</h1>
       <div className="flex flex-col gap-4">
         {orders.map((o) => (
-          <div key={o.id} className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+          <div key={o.id} className="rounded-lg border border-border bg-card p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="font-medium">{o.product_title ?? o.product_url}</p>
@@ -37,7 +37,7 @@ export default async function AdminOrdersPage() {
               <img
                 src={`/api/admin/orders/${o.id}/screenshot`}
                 alt="Payment proof"
-                className="mt-3 max-h-64 rounded border border-neutral-200"
+                className="mt-3 max-h-64 rounded border border-border"
               />
             )}
 

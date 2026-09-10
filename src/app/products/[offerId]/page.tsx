@@ -13,7 +13,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     <div className="mx-auto max-w-4xl py-8">
       {/* Back navigation & Title */}
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-4xl">
+        <h1 className="text-3xl font-extrabold tracking-tight text-foreground dark:text-white sm:text-4xl">
           {variants[0].title}
         </h1>
         <p className="mt-3 text-lg text-neutral-500 dark:text-neutral-400">
@@ -23,7 +23,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
       <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
         {/* Left side / Image Placeholder or description box */}
-        <div className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-50 p-8 shadow-inner dark:border-neutral-800 dark:bg-neutral-900/50 lg:col-span-7">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-background p-8 shadow-inner lg:col-span-7">
           <div className="absolute inset-0 z-0 opacity-20 mix-blend-color-dodge">
             <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-brand-light/60 blur-3xl" />
             <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-brand-dark/60 blur-3xl" />
@@ -31,7 +31,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           
           <div className="relative z-10 flex h-64 items-center justify-center">
             {variants[0].image_url ? (
-              <div className="flex h-56 w-56 items-center justify-center rounded-[2rem] bg-white p-6 shadow-2xl ring-1 ring-neutral-200/50 dark:ring-white/10">
+              <div className="flex h-56 w-56 items-center justify-center rounded-[2rem] bg-card p-6 shadow-2xl ring-1 ring-neutral-200/50 dark:ring-white/10">
                 <img 
                   src={variants[0].image_url} 
                   alt={variants[0].title} 
@@ -41,7 +41,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             ) : (
               <div className="text-center">
                 <span className="text-6xl text-brand drop-shadow-sm">✨</span>
-                <h2 className="mt-6 text-xl font-bold text-neutral-900 dark:text-white">Premium Quality</h2>
+                <h2 className="mt-6 text-xl font-bold text-foreground dark:text-white">Premium Quality</h2>
                 <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
                   Instant delivery. 100% verified sellers.
                 </p>

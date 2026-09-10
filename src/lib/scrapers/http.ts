@@ -1,6 +1,6 @@
 import { fetch, ProxyAgent, type Dispatcher } from 'undici';
 import * as cheerio from 'cheerio';
-import { config } from '../config.js';
+import { config } from '../config';
 
 const DESKTOP_USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';

@@ -1,5 +1,5 @@
 import type { Context } from 'telegraf';
-import { supabase } from './supabase.js';
+import { supabase } from './supabase';
 
 export async function upsertUserFromCtx(ctx: Context): Promise<void> {
   const from = ctx.from;

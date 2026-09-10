@@ -1,8 +1,8 @@
-import { scrapeG2A } from './g2a.js';
-import { scrapeG2G } from './g2g.js';
-import type { Marketplace, ScrapeResult } from './types.js';
+import { scrapeG2A } from './g2a';
+import { scrapeG2G } from './g2g';
+import type { Marketplace, ScrapeResult } from './types';
 
-export type { Marketplace, ScrapeResult, ScrapedProduct } from './types.js';
+export type { Marketplace, ScrapeResult, ScrapedProduct } from './types';
 
 export function detectMarketplace(url: string): Marketplace | null {
   let host: string;

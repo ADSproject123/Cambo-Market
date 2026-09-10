@@ -1,6 +1,6 @@
-import { upsertScrapedProducts } from './db/products.js';
-import { fetchG2GCategoryOffers } from './scrapers/g2gCatalog.js';
-import { logger } from './logger.js';
+import { upsertScrapedProducts } from './db/products';
+import { fetchG2GCategoryOffers } from './scrapers/g2gCatalog';
+import { logger } from './logger';
 
 /**
  * G2G category slugs this bot can auto-refresh via /sync (no args) and on

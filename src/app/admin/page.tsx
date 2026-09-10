@@ -11,14 +11,14 @@ export default async function AdminDashboardPage() {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         <Link
           href="/admin/orders"
-          className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-brand dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-dark"
+          className="rounded-lg border border-border bg-card p-4 transition-colors hover:border-brand dark:hover:border-brand-dark"
         >
           <p className="text-2xl font-bold text-brand">{pending.length}</p>
           <p className="text-sm text-neutral-500">Orders awaiting review</p>
         </Link>
         <Link
           href="/admin/products"
-          className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-brand dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-dark"
+          className="rounded-lg border border-border bg-card p-4 transition-colors hover:border-brand dark:hover:border-brand-dark"
         >
           <p className="text-2xl font-bold text-brand">{products.length}</p>
           <p className="text-sm text-neutral-500">Listed products</p>

@@ -1,11 +1,11 @@
 import type { Context, Telegraf } from 'telegraf';
-import { config } from '../../lib/config.js';
-import { createOrder } from '../../lib/db/orders.js';
-import { upsertUserFromCtx } from '../../lib/db/users.js';
-import { applyServiceFee, formatMoney } from '../../lib/pricing.js';
-import { detectMarketplace, scrapeProduct } from '../../lib/scrapers/index.js';
-import { notifyAdmins } from '../notifyAdmins.js';
-import { buyOrCancelKeyboard } from '../keyboards.js';
+import { config } from '../../lib/config';
+import { createOrder } from '../../lib/db/orders';
+import { upsertUserFromCtx } from '../../lib/db/users';
+import { applyServiceFee, formatMoney } from '../../lib/pricing';
+import { detectMarketplace, scrapeProduct } from '../../lib/scrapers/index';
+import { notifyAdmins } from '../notifyAdmins';
+import { buyOrCancelKeyboard } from '../keyboards';
 
 const URL_RE = /https?:\/\/\S+/i;
 

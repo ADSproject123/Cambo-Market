@@ -1,8 +1,8 @@
 import type { Telegram } from 'telegraf';
-import { config } from '../lib/config.js';
-import { updateOrder } from '../lib/db/orders.js';
-import type { OrderRow } from '../lib/db/orders.js';
-import { logger } from '../lib/logger.js';
+import { config } from '../lib/config';
+import { updateOrder } from '../lib/db/orders';
+import type { OrderRow } from '../lib/db/orders';
+import { logger } from '../lib/logger';
 
 /**
  * Broadcasts a message to every configured admin chat, and remembers the

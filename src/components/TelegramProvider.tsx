@@ -2,7 +2,6 @@
 
 import Script from 'next/script';
 import { useEffect } from 'react';
-import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 
 // Extend the window object to include Telegram
@@ -15,7 +14,6 @@ declare global {
 }
 
 export function TelegramProvider({ children }: { children: React.ReactNode }) {
-  const { setTheme } = useTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -29,17 +27,8 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
       // Expand the Mini App to take the full height of the screen
       tg.expand();
 
-      // Set the theme based on Telegram's color scheme
-      if (tg.colorScheme) {
-        setTheme(tg.colorScheme);
-      }
-
-      // Listen to theme changes from Telegram
-      tg.onEvent('themeChanged', () => {
-        if (tg.colorScheme) {
-          setTheme(tg.colorScheme);
-        }
-      });
+      // Removed theme switching because the app is now strictly dark mode 
+      // but still uses Telegram variables via CSS.
       
       // Prevent overscroll behavior on mobile
       document.body.style.overflowY = 'hidden';
@@ -61,7 +50,7 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
         }).catch(err => console.error('Telegram auth error:', err));
       }
     }
-  }, [setTheme, router]);
+  }, [router]);
 
   return (
     <>

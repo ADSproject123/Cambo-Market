@@ -1,14 +1,14 @@
 import type { Context } from 'telegraf';
-import { config } from '../../lib/config.js';
-import { syncCategory } from '../../lib/catalogSync.js';
-import { createOrder } from '../../lib/db/orders.js';
-import { getProduct, listCategories, listProducts } from '../../lib/db/products.js';
-import { upsertUserFromCtx } from '../../lib/db/users.js';
-import { formatCategoryName } from '../../lib/format.js';
-import { formatMoney } from '../../lib/pricing.js';
-import { detectMarketplace } from '../../lib/scrapers/index.js';
-import { categoryMenuKeyboard, productDetailKeyboard, productListKeyboard } from '../keyboards.js';
-import { presentPaymentQr } from './order.js';
+import { config } from '../../lib/config';
+import { syncCategory } from '../../lib/catalogSync';
+import { createOrder } from '../../lib/db/orders';
+import { getProduct, listCategories, listProducts } from '../../lib/db/products';
+import { upsertUserFromCtx } from '../../lib/db/users';
+import { formatCategoryName } from '../../lib/format';
+import { formatMoney } from '../../lib/pricing';
+import { detectMarketplace } from '../../lib/scrapers/index';
+import { categoryMenuKeyboard, productDetailKeyboard, productListKeyboard } from '../keyboards';
+import { presentPaymentQr } from './order';
 
 export async function handleShowCategoryMenu(ctx: Context): Promise<void> {
   await upsertUserFromCtx(ctx);

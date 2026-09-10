@@ -62,7 +62,7 @@ export default function ProductForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 rounded-lg border border-border bg-card p-4">
       <input
         required
         placeholder="Category slug (e.g. google-accounts)"
@@ -100,7 +100,7 @@ export default function ProductForm({
         className="rounded-lg border border-neutral-300 px-2 py-1 text-sm focus:border-brand"
       />
 
-      <div className="mt-2 border-t border-neutral-200 pt-2">
+      <div className="mt-2 border-t border-border pt-2">
         <p className="mb-2 text-xs font-medium text-neutral-500">
           Price tiers (optional) — give two or more products the same group key to show them as one
           card with a plan selector, e.g. &ldquo;notion-business&rdquo; for both a 1-month and 3-month listing.

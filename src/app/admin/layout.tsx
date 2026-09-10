@@ -9,7 +9,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div>
-      <nav className="mb-6 flex gap-5 border-b border-neutral-200 pb-3 text-sm font-medium">
+      <nav className="mb-6 flex gap-5 border-b border-border pb-3 text-sm font-medium">
         <Link href="/admin" className="hover:text-brand">Dashboard</Link>
         <Link href="/admin/products" className="hover:text-brand">Products</Link>
         <Link href="/admin/orders" className="hover:text-brand">Orders</Link>

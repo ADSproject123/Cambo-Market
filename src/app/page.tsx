@@ -49,11 +49,11 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       {/* Categories Grid */}
       <section>
         <div className="mb-8 flex items-end justify-between">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Explore Catalog</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground dark:text-white">Explore Catalog</h2>
         </div>
         
         {categories.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 py-24 text-center dark:border-neutral-800 dark:bg-neutral-900/50">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-background py-24 text-center">
             <p className="text-lg font-medium text-neutral-600 dark:text-neutral-400">No listings available right now</p>
             <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-500">Please check back shortly as we sync our catalog.</p>
           </div>
@@ -64,20 +64,20 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 key={c.category}
                 href={`/categories/${c.category}`}
                 style={{ animationDelay: `${i * 100}ms` }}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-light hover:shadow-xl hover:shadow-brand/5 animate-[fade-in-up_0.6s_ease-out_both] dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-dark"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-light hover:shadow-xl hover:shadow-brand/5 animate-[fade-in-up_0.6s_ease-out_both] dark:hover:border-brand-dark"
               >
                 {/* Subtle gradient hover effect inside the card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-light/0 to-brand-light/0 transition-all duration-500 group-hover:from-brand-light/5 group-hover:to-transparent" />
                 
                 <div className="relative z-10">
-                  <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-neutral-50 p-3 shadow-sm ring-1 ring-neutral-200/50 transition-transform duration-300 group-hover:scale-110 dark:bg-white dark:ring-white/20">
+                  <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-background p-3 shadow-sm ring-1 ring-neutral-200/50 transition-transform duration-300 group-hover:scale-110 dark:bg-card dark:ring-white/20">
                     {c.imageUrl ? (
                       <img src={c.imageUrl} alt={c.category} className="h-full w-full object-contain" />
                     ) : (
                       <span className="text-3xl">✨</span>
                     )}
                   </div>
-                  <h3 className="text-xl font-bold text-neutral-900 transition-colors group-hover:text-brand-dark dark:text-neutral-100 dark:group-hover:text-brand-light">{formatCategoryName(c.category)}</h3>
+                  <h3 className="text-xl font-bold text-foreground transition-colors group-hover:text-brand-dark dark:text-neutral-100 dark:group-hover:text-brand-light">{formatCategoryName(c.category)}</h3>
                   <p className="mt-2 text-sm font-medium text-neutral-500 dark:text-neutral-400">{c.count} listing{c.count === 1 ? '' : 's'}</p>
                 </div>
                 

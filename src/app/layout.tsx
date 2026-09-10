@@ -22,19 +22,16 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-import { ThemeProvider } from '@/components/ThemeProvider';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { TelegramProvider } from '@/components/TelegramProvider';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-neutral-50 text-neutral-900 selection:bg-brand selection:text-white dark:bg-neutral-950 dark:text-neutral-50">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <TelegramProvider>
-            <header className="sticky top-0 z-50 border-b border-neutral-200/50 bg-white/70 backdrop-blur-md shadow-sm transition-all duration-300 dark:border-neutral-800/50 dark:bg-neutral-950/70">
+    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-brand selection:text-white">
+        <TelegramProvider>
+          <header className="sticky top-0 z-50 border-b border-border/50 bg-card/70 backdrop-blur-md shadow-sm transition-all duration-300">
             <nav className="mx-auto flex w-full items-center justify-between gap-4 px-4 sm:px-8 py-4">
               <Link href="/" className="group flex items-center gap-3 text-xl font-bold tracking-tight">
                 <div className="overflow-hidden rounded-lg shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:shadow-brand/20">
@@ -44,7 +41,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </Link>
               
               <div className="flex items-center gap-4 text-sm font-medium sm:gap-6">
-                <ThemeToggle />
                 {user ? (
                   <>
                     <Link href="/orders" className="transition-colors hover:text-brand">My orders</Link>
@@ -58,7 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     <Link href="/login" className="hidden transition-colors hover:text-brand sm:inline">Log in</Link>
                     <Link
                       href="/signup"
-                      className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-white shadow-sm transition-all hover:bg-brand hover:shadow-md hover:shadow-brand/20 active:scale-95 dark:bg-white dark:text-neutral-900 dark:hover:bg-brand dark:hover:text-white"
+                      className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-white shadow-sm transition-all hover:bg-brand hover:shadow-md hover:shadow-brand/20 active:scale-95 dark:bg-card dark:text-foreground dark:hover:bg-brand dark:hover:text-white"
                     >
                       Sign up
                     </Link>
@@ -68,8 +64,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </nav>
           </header>
           <main className="mx-auto w-full flex-1 px-4 sm:px-8 py-8 sm:py-12 animate-[fade-in-up_0.6s_ease-out]">{children}</main>
-          </TelegramProvider>
-        </ThemeProvider>
+        </TelegramProvider>
       </body>
     </html>
   );

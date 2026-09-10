@@ -1,7 +1,7 @@
 import type { Context } from 'telegraf';
 import { Markup } from 'telegraf';
-import { upsertUserFromCtx } from '../../lib/db/users.js';
-import { config } from '../../lib/config.js';
+import { upsertUserFromCtx } from '../../lib/db/users';
+import { config } from '../../lib/config';
 
 export async function handleStart(ctx: Context): Promise<void> {
   await upsertUserFromCtx(ctx);

@@ -23,7 +23,7 @@ export function SearchBar() {
         placeholder="Search digital products..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full rounded-full border border-neutral-200 bg-neutral-50/50 py-2 pl-10 pr-4 text-sm outline-none transition-all focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20 dark:border-neutral-800 dark:bg-neutral-900/50 dark:text-neutral-100 dark:focus:border-brand dark:focus:bg-neutral-900"
+        className="w-full rounded-full border border-border bg-background/50 py-2 pl-10 pr-4 text-sm outline-none transition-all focus:border-brand focus:bg-card focus:ring-2 focus:ring-brand/20 dark:text-neutral-100 dark:focus:border-brand dark:focus:bg-neutral-900"
       />
     </form>
   );

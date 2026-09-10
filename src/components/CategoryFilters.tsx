@@ -49,7 +49,7 @@ export function CategoryFilters() {
       <button 
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-10 items-center justify-center gap-2 rounded-full border border-neutral-200 bg-white px-4 text-sm font-medium text-neutral-700 shadow-sm transition-all hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800"
+        className="flex h-10 items-center justify-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-neutral-700 shadow-sm transition-all hover:bg-background dark:text-neutral-200 dark:hover:bg-neutral-800"
       >
         <Filter size={16} />
         Filters
@@ -61,9 +61,9 @@ export function CategoryFilters() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-12 z-50 w-72 origin-top-right rounded-2xl border border-neutral-200 bg-white p-5 shadow-xl animate-[fade-in-up_0.2s_ease-out] dark:border-neutral-800 dark:bg-neutral-950 sm:left-0 sm:right-auto sm:origin-top-left">
+        <div className="absolute right-0 top-12 z-50 w-72 origin-top-right rounded-2xl border border-border bg-card p-5 shadow-xl animate-[fade-in-up_0.2s_ease-out] sm:left-0 sm:right-auto sm:origin-top-left">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-semibold text-neutral-900 dark:text-white">Filter Results</h3>
+            <h3 className="font-semibold text-foreground dark:text-white">Filter Results</h3>
             <button type="button" onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
               <X size={18} />
             </button>
@@ -78,7 +78,7 @@ export function CategoryFilters() {
                   placeholder="Min" 
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
-                  className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-900 outline-none transition-colors focus:border-brand focus:bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:focus:border-brand"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-brand focus:bg-card dark:border-neutral-700 dark:text-white dark:focus:border-brand"
                 />
                 <span className="text-neutral-400">-</span>
                 <input 
@@ -86,12 +86,12 @@ export function CategoryFilters() {
                   placeholder="Max" 
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-900 outline-none transition-colors focus:border-brand focus:bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:focus:border-brand"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-brand focus:bg-card dark:border-neutral-700 dark:text-white dark:focus:border-brand"
                 />
               </div>
             </div>
 
-            <label className="flex items-center gap-3 rounded-lg border border-neutral-200 p-3 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900/50 cursor-pointer">
+            <label className="flex items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:bg-background dark:hover:bg-neutral-900/50 cursor-pointer">
               <input 
                 type="checkbox" 
                 checked={verifiedOnly}
@@ -103,7 +103,7 @@ export function CategoryFilters() {
 
             <button 
               type="submit" 
-              className="mt-2 w-full rounded-lg bg-neutral-900 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand dark:bg-white dark:text-neutral-900 dark:hover:bg-brand dark:hover:text-white"
+              className="mt-2 w-full rounded-lg bg-neutral-900 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand dark:bg-card dark:text-foreground dark:hover:bg-brand dark:hover:text-white"
             >
               Apply Filters
             </button>

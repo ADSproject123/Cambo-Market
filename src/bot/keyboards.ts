@@ -1,6 +1,6 @@
 import { Markup } from 'telegraf';
-import type { CategorySummary, ProductRow } from '../lib/db/products.js';
-import { formatCategoryName } from '../lib/format.js';
+import type { CategorySummary, ProductRow } from '../lib/db/products';
+import { formatCategoryName } from '../lib/format';
 
 export const categoryMenuKeyboard = (categories: CategorySummary[]) =>
   Markup.inlineKeyboard(

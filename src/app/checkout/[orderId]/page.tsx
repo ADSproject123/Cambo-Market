@@ -26,7 +26,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ order
 
       {order.status === 'awaiting_payment' && (
         <>
-          <div className="mt-6 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="mt-6 rounded-lg border border-border bg-card p-4">
             <Image src="/payment-qr.png" alt="Payment QR code" width={280} height={280} className="mx-auto" />
             <p className="mt-3 whitespace-pre-line text-sm text-neutral-600 dark:text-neutral-400">{PAYMENT_INSTRUCTIONS}</p>
           </div>

@@ -2,20 +2,20 @@ import dns from 'node:dns';
 import net from 'node:net';
 import { Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';
-import { config } from '../lib/config.js';
-import { logger } from '../lib/logger.js';
-import { CATALOG_CATEGORIES, syncAllCategories, syncCategory } from '../lib/catalogSync.js';
-import { isAdminContext } from './auth.js';
-import { handleStart } from './handlers/start.js';
-import { handleLookup } from './handlers/lookup.js';
+import { config } from '../lib/config';
+import { logger } from '../lib/logger';
+import { CATALOG_CATEGORIES, syncAllCategories, syncCategory } from '../lib/catalogSync';
+import { isAdminContext } from './auth';
+import { handleStart } from './handlers/start';
+import { handleLookup } from './handlers/lookup';
 import {
   handleShowCategoryMenu,
   handleShowCatalog,
   handleProductDetailCallback,
   handleProductBuyCallback,
-} from './handlers/catalog.js';
-import { handleBuyCallback, handleCancelCallback, handlePaymentScreenshot } from './handlers/order.js';
-import { handleApproveCallback, handleRejectCallback, handleAdminReply } from './handlers/admin.js';
+} from './handlers/catalog';
+import { handleBuyCallback, handleCancelCallback, handlePaymentScreenshot } from './handlers/order';
+import { handleApproveCallback, handleRejectCallback, handleAdminReply } from './handlers/admin';
 
 // This host has no working IPv6 route, and the real (IPv4) connection to
 // Telegram's servers sometimes takes longer than Node's default 250ms
@@ -25,7 +25,7 @@ import { handleApproveCallback, handleRejectCallback, handleAdminReply } from '.
 dns.setDefaultResultOrder('ipv4first');
 net.setDefaultAutoSelectFamily(false);
 
-const bot = new Telegraf(config.botToken);
+export const bot = new Telegraf(config.botToken);
 
 bot.start((ctx) => handleStart(ctx));
 
@@ -83,10 +83,15 @@ bot.catch((err, ctx) => {
   logger.error(`Unhandled error for update ${ctx.updateType}`, err);
 });
 
-bot.launch();
-logger.info('Bot started');
+// Run in long-polling mode if executed directly locally
+if (process.env.NODE_ENV !== 'production' && process.argv[1]?.includes('src/bot/index.ts')) {
+  bot.launch();
+  logger.info('Bot started locally in polling mode');
+  
+  import('../lib/catalogSync').then(({ syncAllCategories }) => {
+    syncAllCategories().catch((err: any) => logger.error('Initial catalog sync failed', err));
+  });
 
-syncAllCategories().catch((err: any) => logger.error('Initial catalog sync failed', err));
-
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+  process.once('SIGINT', () => bot.stop('SIGINT'));
+  process.once('SIGTERM', () => bot.stop('SIGTERM'));
+}

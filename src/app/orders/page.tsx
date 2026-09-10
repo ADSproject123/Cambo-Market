@@ -32,7 +32,7 @@ export default async function OrdersPage() {
             <Link
               key={o.id}
               href={`/checkout/${o.id}`}
-              className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-brand dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-brand-dark"
+              className="rounded-lg border border-border bg-card p-4 transition-colors hover:border-brand dark:hover:border-brand-dark"
             >
               <div className="flex items-center justify-between">
                 <p className="font-medium dark:text-white">{o.product_title}</p>

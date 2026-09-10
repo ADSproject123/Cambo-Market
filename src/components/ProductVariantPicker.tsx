@@ -29,7 +29,7 @@ export default function ProductVariantPicker({
   const selected = variants.find((v) => v.offerId === selectedId) ?? variants[0];
 
   return (
-    <div className="flex flex-col gap-6 rounded-3xl border border-neutral-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900 sm:p-8">
+    <div className="flex flex-col gap-6 rounded-3xl border border-border bg-card p-6 shadow-xl sm:p-8">
       {/* Price Header */}
       <div>
         <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Total Price</p>
@@ -41,7 +41,7 @@ export default function ProductVariantPicker({
       {/* Variants Selection */}
       {variants.length > 1 && (
         <div className="space-y-3">
-          <p className="text-sm font-semibold text-neutral-900 dark:text-white">Choose your plan</p>
+          <p className="text-sm font-semibold text-foreground dark:text-white">Choose your plan</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {variants.map((v, i) => {
               const isSelected = v.offerId === selectedId;
@@ -52,7 +52,7 @@ export default function ProductVariantPicker({
                   className={`relative flex flex-col items-center justify-center overflow-hidden rounded-xl border-2 p-3 text-center transition-all ${
                     isSelected
                       ? 'border-brand bg-brand/5 shadow-md dark:border-brand dark:bg-brand/10'
-                      : 'border-neutral-200 bg-white hover:border-brand-light hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700'
+                      : 'border-border bg-card hover:border-brand-light hover:bg-background   dark:hover:border-neutral-700'
                   }`}
                 >
                   {isSelected && (
@@ -71,15 +71,15 @@ export default function ProductVariantPicker({
       )}
 
       {/* Product Details Box */}
-      <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 dark:border-neutral-800 dark:bg-neutral-900/50">
+      <div className="rounded-2xl border border-border bg-background p-5">
         <ul className="space-y-4">
           <li className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm dark:bg-neutral-800">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-card shadow-sm dark:bg-neutral-800">
               <ShieldCheck size={20} className="text-emerald-500" />
             </div>
             <div>
               <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Seller</p>
-              <p className="text-base font-semibold text-neutral-900 dark:text-white flex items-center gap-1">
+              <p className="text-base font-semibold text-foreground dark:text-white flex items-center gap-1">
                 {selected.sellerUsername}
                 {selected.sellerVerified && (
                   <span title="Verified Seller" className="text-emerald-500">
@@ -92,24 +92,24 @@ export default function ProductVariantPicker({
           
           {selected.rating !== null && (
             <li className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm dark:bg-neutral-800">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-card shadow-sm dark:bg-neutral-800">
                 <Star size={20} className="text-amber-400 fill-amber-400" />
               </div>
               <div>
                 <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Rating</p>
-                <p className="text-base font-semibold text-neutral-900 dark:text-white">{selected.rating} / 5</p>
+                <p className="text-base font-semibold text-foreground dark:text-white">{selected.rating} / 5</p>
               </div>
             </li>
           )}
 
           {selected.availableQty > 0 && (
             <li className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm dark:bg-neutral-800">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-card shadow-sm dark:bg-neutral-800">
                 <Box size={20} className="text-blue-500" />
               </div>
               <div>
                 <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Stock Availability</p>
-                <p className="text-base font-semibold text-neutral-900 dark:text-white">{selected.availableQty} units left</p>
+                <p className="text-base font-semibold text-foreground dark:text-white">{selected.availableQty} units left</p>
               </div>
             </li>
           )}

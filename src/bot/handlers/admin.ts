@@ -1,9 +1,9 @@
 import type { Context, Telegraf } from 'telegraf';
-import { findOrderByAdminMessage, getOrder, updateOrder } from '../../lib/db/orders.js';
-import { applyServiceFee, formatMoney } from '../../lib/pricing.js';
-import { isAdminContext } from '../auth.js';
-import { buyOrCancelKeyboard } from '../keyboards.js';
-import { shortRef } from './order.js';
+import { findOrderByAdminMessage, getOrder, updateOrder } from '../../lib/db/orders';
+import { applyServiceFee, formatMoney } from '../../lib/pricing';
+import { isAdminContext } from '../auth';
+import { buyOrCancelKeyboard } from '../keyboards';
+import { shortRef } from './order';
 
 export async function handleApproveCallback(ctx: Context): Promise<void> {
   if (!isAdminContext(ctx)) {

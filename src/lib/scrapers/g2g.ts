@@ -1,5 +1,5 @@
-import { extractJsonLdProduct, extractMetaProduct, fetchHtml, priceFromJsonLd } from './http.js';
-import type { ScrapeResult } from './types.js';
+import { extractJsonLdProduct, extractMetaProduct, fetchHtml, priceFromJsonLd } from './http';
+import type { ScrapeResult } from './types';
 
 /**
  * G2G server-renders most pages, so plain HTTP fetch works where a headless
