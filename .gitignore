@@ -3,9 +3,14 @@ dist/
 .env
 .env.local
 .env.*.local
+# Saved G2A browser login session (cookies/localStorage) — equivalent to a
+# logged-in password, must never be committed. See scripts/g2a-login.ts.
+.auth/
 *.log
 .next/
 .vercel/
 out/
 build/
 .vercel
+# Scraped data output — generated, not source.
+output/

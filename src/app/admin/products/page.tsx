@@ -4,6 +4,7 @@ import { sellPrice, formatMoney } from '@/lib/pricing';
 import SyncCategoryForm from '@/components/admin/SyncCategoryForm';
 import AddProductForm from '@/components/admin/AddProductForm';
 import DeleteProductButton from '@/components/admin/DeleteProductButton';
+import G2GAuthScrapeButton from '@/components/admin/G2GAuthScrapeButton';
 
 export default async function AdminProductsPage() {
   const products = await listProducts();
@@ -15,6 +16,10 @@ export default async function AdminProductsPage() {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <SyncCategoryForm />
         <AddProductForm />
+      </div>
+
+      <div className="mb-6">
+        <G2GAuthScrapeButton />
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-border bg-card">

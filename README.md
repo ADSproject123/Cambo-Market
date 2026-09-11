@@ -100,6 +100,79 @@ I tested live against both sites before building this:
   price manually (the link-paste `needs_quote` flow) and should treat scraped
   prices as a starting point, not gospel — double-check before buying.
 
+## Authenticated G2A scraping (experimental)
+
+The scraping reality check above explains why G2A can't be scraped from
+wherever this bot/server runs: G2A 403s essentially every request — even a
+logged-out homepage load — from a typical server/datacenter IP. That's
+IP-reputation blocking at the edge, not an auth wall, so logging in doesn't
+fix it *from this kind of network*. It's a separate, parallel path from the
+existing scraper — it doesn't replace or touch `src/lib/scrapers/g2a.ts`.
+
+The workaround: run a real, visible browser logged into your own G2A account
+from a network G2A doesn't block (your own machine, not this server), save
+that login session to disk once, then reuse it for scraping runs. Two steps:
+
+1. **`npm run login:g2a`** — opens a real Chromium window and navigates to
+   G2A's login page. Log in by hand (this covers 2FA/CAPTCHA for free, since
+   you're the one solving it), then press Enter in the terminal when you're
+   logged in. Your session (cookies + localStorage) is saved to
+   `.auth/g2a-storage-state.json` — gitignored, since it's equivalent to a
+   logged-in password for your account. Re-run this any time you need to log
+   in again (it always starts from a blank browser profile).
+2. **`npm run scrape:g2a -- <url>`** — opens the given URL in a browser reusing
+   that saved session. Refuses to run if you haven't logged in yet.
+
+Both scripts are plain `tsx`-run Node scripts under [`scripts/`](scripts/),
+built on shared helpers in
+[`src/lib/scrapers/playwright/session.ts`](src/lib/scrapers/playwright/session.ts).
+
+**This is a scaffold, not a finished scraper.** Nobody here has been able to
+load a real G2A page to inspect its actual login form or product-page DOM —
+that's blocked from this environment too, for the same IP-reputation reason.
+So `scripts/g2a-scrape-authenticated.ts` opens the page and then hands you
+the `page` object inside a clearly marked
+`// ===== TODO(user): write your scraping logic below =====` section — fill
+that in with real selectors once you can actually see the live page from your
+own network. Everything before that TODO section (browser launch, session
+reuse, navigation) is working scaffold; everything selector-shaped is an
+unverified guess you need to confirm or replace yourself.
+
+## Authenticated G2G scraping
+
+Unlike G2A, G2G's plain-HTTP scraper
+([`src/lib/scrapers/g2gCatalog.ts`](src/lib/scrapers/g2gCatalog.ts)) already
+covers category listings without logging in (see the scraping reality check
+above). This authenticated path exists for what that scraper *doesn't*
+reach: an individual offer's detail page, specifically its overall stock
+figure and its "other sellers" list (each seller's level, satisfaction rate,
+sold count, min/available quantity, delivery time, and price). It shares the
+same `.auth/`-based session approach as G2A, generalized in
+[`src/lib/scrapers/playwright/session.ts`](src/lib/scrapers/playwright/session.ts)
+to take a `site: 'g2a' | 'g2g'` argument.
+
+1. **`npm run login:g2g`** — opens a real Chromium window and navigates to
+   G2G's login page. If both `G2G_GMAIL` and `G2G_PASSWORD` are set, it
+   auto-fills and submits the login form for you; otherwise log in by hand.
+   Either way you get a chance to solve any CAPTCHA/2FA challenge before
+   pressing Enter in the terminal, which saves the session to
+   `.auth/g2g-storage-state.json` (gitignored, equivalent to a logged-in
+   password). Re-run this any time you need to log in again.
+2. **`npm run scrape:g2g`** — reuses that saved session to open
+   `https://www.g2g.com/categories/google-accounts`, extract every product
+   card, then visit each one's detail page for its stock and other-seller
+   list, writing everything to `output/g2g-google-accounts.json` (gitignored
+   scraped output). Refuses to run if you haven't logged in yet. Pauses
+   briefly between detail-page visits to avoid hammering the site with a
+   real authenticated account.
+
+**Unlike the G2A scaffold above, the selectors in
+[`scripts/g2g-scrape-google-accounts.ts`](scripts/g2g-scrape-google-accounts.ts)
+are not guesses** — they were written against real HTML captured directly
+from G2G's login page, category page, and an offer detail page. Still, worth
+a live re-check before relying on this: DOM structure can drift over time,
+and may vary slightly across individual offers.
+
 ## Setup
 
 1. **Create the bot**: talk to [@BotFather](https://t.me/BotFather), get a
