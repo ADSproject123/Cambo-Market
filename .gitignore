@@ -14,3 +14,4 @@ build/
 .vercel
 # Scraped data output — generated, not source.
 output/
+.env*

@@ -15,6 +15,19 @@ import { scrapeGoogleAccounts } from '@scripts/g2g-scrape-google-accounts';
 export async function POST() {
   try {
     await requireRole('admin');
+
+    // Refuse outright on Vercel (or any host setting this): launching a
+    // real, visible Chromium here would fail anyway (no browser binary
+    // downloaded, no display), and this server's IP is the exact kind
+    // that's blocked by G2G in the first place. Vercel sets VERCEL=1 on
+    // every deployment automatically.
+    if (process.env.VERCEL) {
+      return NextResponse.json(
+        { error: 'Authenticated G2G scraping only runs locally (npm run dev) — not on a deployed server. See README "Authenticated G2G scraping".' },
+        { status: 501 },
+      );
+    }
+
     const { results, totalSellerOffers } = await scrapeGoogleAccounts();
 
     return NextResponse.json({

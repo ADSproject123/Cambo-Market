@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/browser';
 import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function SignupPage() {
+  const router = useRouter();
   const supabase = createClient();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,13 +21,25 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
     setLoading(false);
 
     if (error) {
       setError(error.message);
       return;
     }
+
+    if (data.session) {
+      // Email confirmation is off in Supabase (or this email was already
+      // confirmed before) — signUp() signs the user in immediately, so skip
+      // the "check your email" step and go straight into the app.
+      router.push('/');
+      router.refresh();
+      return;
+    }
+
+    // Confirmation is still required — Supabase only returns a session once
+    // the link is clicked, not here.
     setDone(true);
   }
 
