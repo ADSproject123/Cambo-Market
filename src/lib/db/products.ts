@@ -182,3 +182,18 @@ export async function deleteProduct(offerId: string): Promise<void> {
   const { error } = await db.from('products').delete().eq('offer_id', offerId);
   if (error) throw error;
 }
+
+export async function deleteProducts(offerIds: string[]): Promise<void> {
+  if (offerIds.length === 0) return;
+  const db = createAdminClient();
+  const { error } = await db.from('products').delete().in('offer_id', offerIds);
+  if (error) throw error;
+}
+
+/** Distinct category names currently in use, for the admin filter dropdown. */
+export async function listDistinctCategories(): Promise<string[]> {
+  const db = createAdminClient();
+  const { data, error } = await db.from('products').select('category').order('category');
+  if (error) throw error;
+  return Array.from(new Set((data ?? []).map((r) => r.category as string)));
+}
